@@ -38,7 +38,11 @@
             this.削除DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userpawoonetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
+            this.textBoxPost = new System.Windows.Forms.TextBox();
+            this.buttonPost = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -114,16 +118,58 @@
             // 
             // tableLayoutPanel
             // 
+            this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel.ColumnCount = 1;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 24);
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 68);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 1;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(1132, 557);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(1132, 513);
             this.tableLayoutPanel.TabIndex = 1;
+            // 
+            // pictureBoxUser
+            // 
+            this.pictureBoxUser.Location = new System.Drawing.Point(3, 12);
+            this.pictureBoxUser.Name = "pictureBoxUser";
+            this.pictureBoxUser.Size = new System.Drawing.Size(48, 48);
+            this.pictureBoxUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxUser.TabIndex = 2;
+            this.pictureBoxUser.TabStop = false;
+            // 
+            // textBoxPost
+            // 
+            this.textBoxPost.AcceptsReturn = true;
+            this.textBoxPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxPost.BackColor = System.Drawing.Color.Silver;
+            this.textBoxPost.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.textBoxPost.ForeColor = System.Drawing.Color.Gray;
+            this.textBoxPost.Location = new System.Drawing.Point(57, 14);
+            this.textBoxPost.MaxLength = 500;
+            this.textBoxPost.Multiline = true;
+            this.textBoxPost.Name = "textBoxPost";
+            this.textBoxPost.Size = new System.Drawing.Size(982, 48);
+            this.textBoxPost.TabIndex = 3;
+            this.textBoxPost.Text = "今なにしてる？";
+            this.textBoxPost.Enter += new System.EventHandler(this.textBoxPost_Enter);
+            this.textBoxPost.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxPost_KeyDown);
+            this.textBoxPost.Leave += new System.EventHandler(this.textBoxPost_Leave);
+            // 
+            // buttonPost
+            // 
+            this.buttonPost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPost.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonPost.Location = new System.Drawing.Point(1045, 28);
+            this.buttonPost.Name = "buttonPost";
+            this.buttonPost.Size = new System.Drawing.Size(75, 23);
+            this.buttonPost.TabIndex = 4;
+            this.buttonPost.Text = "投稿する";
+            this.buttonPost.UseVisualStyleBackColor = true;
+            this.buttonPost.Click += new System.EventHandler(this.buttonPost_Click);
             // 
             // MainForm
             // 
@@ -131,6 +177,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(1132, 581);
+            this.Controls.Add(this.buttonPost);
+            this.Controls.Add(this.textBoxPost);
+            this.Controls.Add(this.pictureBoxUser);
             this.Controls.Add(this.tableLayoutPanel);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -139,6 +188,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,6 +206,9 @@
         private System.Windows.Forms.ToolStripMenuItem 削除DToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem userpawoonetToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.PictureBox pictureBoxUser;
+        private System.Windows.Forms.TextBox textBoxPost;
+        private System.Windows.Forms.Button buttonPost;
     }
 }
 

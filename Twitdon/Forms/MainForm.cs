@@ -3,6 +3,7 @@ using Mastonet;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System;
+using System.Drawing;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,6 +32,11 @@ namespace Twitdon
         /// </summary>
         private List<TwitdonMastodonClient> mastodonClients;
 
+        /// <summary>
+        /// ユーザがテキストボックスに何も入力していない場合 true になります。
+        /// </summary>
+        private bool textboxBlank;
+
         #endregion
 
         #region コンストラクタ
@@ -56,6 +62,7 @@ namespace Twitdon
                 Settings.Default.MastodonEMails = new StringCollection();
                 Settings.Default.MastodonPasswords = new StringCollection();
             }
+            ActiveControl = buttonPost;
         }
 
         /// <summary>
@@ -113,6 +120,32 @@ namespace Twitdon
             AddTimeLine(new TimeLineMastodon(client, streaming, name));
         }
 
+        /// <summary>
+        /// ステータスを投稿します。
+        /// </summary>
+        private async Task Post()
+        {
+            if (textboxBlank || textBoxPost.TextLength == 0)
+            {
+                return;
+            }
+            try
+            {
+                // テスト用
+                ActiveControl = buttonPost;
+                await mastodonClients[0].PostStatus(textBoxPost.Text);
+                textboxBlank = true;
+                textBoxPost.Text = "今なにしてる？";
+                textBoxPost.BackColor = Color.Silver;
+                textBoxPost.ForeColor = Color.Gray;
+            }
+            catch (Exception e)
+            {
+                logger.ErrorFormat($"エラーが発生しました。インターネット接続を確認してください。{e.Message}");
+                Utilities.ShowError($"エラーが発生しました。\nインターネット接続を確認してください。");
+            }
+        }
+
         #endregion
 
         #region イベントハンドラ
@@ -130,14 +163,34 @@ namespace Twitdon
                 }
             }
 
-            // 全クライアントを作成
-            await CreateAllClients();
-
-            // (テスト用)ホーム・Public タイムラインを追加。
-            foreach (var client in mastodonClients)
+            // 登録されたアカウントが無ければ終了
+            if (Settings.Default.MastodonDomains.Count == 0)
             {
-                AddTimeLineMastodon(client, client.UserStreaming, "");
-                AddTimeLineMastodon(client, client.PublicStreaming, "Public  ");
+                Application.Exit();
+                return;
+            }
+
+            try
+            {
+                // 全クライアントを作成
+                await CreateAllClients();
+
+                // (テスト用)ホーム・Public タイムラインを追加。
+                foreach (var client in mastodonClients)
+                {
+                    // (テスト用)ユーザーのアイコン画像を取得する
+                    textboxBlank = true;
+                    pictureBoxUser.ImageLocation = client.Icon;
+                    AddTimeLineMastodon(client, client.UserStreaming, "");
+                    AddTimeLineMastodon(client, client.PublicStreaming, "Public  ");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.ErrorFormat($"エラーが発生しました。インターネット接続を確認してください。{ex.Message}");
+                Utilities.ShowError($"エラーが発生しました。\nインターネット接続を確認してください。");
+                Application.Exit();
+                return;
             }
         }
 
@@ -157,6 +210,38 @@ namespace Twitdon
             {
                 mastodonClients.Add(client as TwitdonMastodonClient);
             }
+        }
+
+        private void textBoxPost_Enter(object sender, EventArgs e)
+        {
+            textboxBlank = false;
+            textBoxPost.Text = "";
+            textBoxPost.BackColor = Color.White;
+            textBoxPost.ForeColor = Color.Black;
+        }
+
+        private void textBoxPost_Leave(object sender, EventArgs e)
+        {
+            if (textBoxPost.TextLength == 0)
+            {
+                textboxBlank = true;
+                textBoxPost.Text = "今なにしてる？";
+            }
+            textBoxPost.BackColor = Color.Silver;
+            textBoxPost.ForeColor = Color.Gray;
+        }
+
+        private async void textBoxPost_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Shift && e.KeyCode == Keys.Enter)
+            {
+                await Post();
+            }
+        }
+
+        private async void buttonPost_Click(object sender, EventArgs e)
+        {
+            await Post();
         }
 
         #endregion

@@ -50,12 +50,11 @@
             // radioButtonTwitter
             // 
             this.radioButtonTwitter.AutoSize = true;
-            this.radioButtonTwitter.Checked = true;
+            this.radioButtonTwitter.Enabled = false;
             this.radioButtonTwitter.Location = new System.Drawing.Point(12, 9);
             this.radioButtonTwitter.Name = "radioButtonTwitter";
             this.radioButtonTwitter.Size = new System.Drawing.Size(59, 16);
             this.radioButtonTwitter.TabIndex = 0;
-            this.radioButtonTwitter.TabStop = true;
             this.radioButtonTwitter.Text = "Twitter";
             this.radioButtonTwitter.UseVisualStyleBackColor = true;
             this.radioButtonTwitter.CheckedChanged += new System.EventHandler(this.radioButtonTwitter_CheckedChanged);
@@ -63,10 +62,12 @@
             // radioButtonMastodon
             // 
             this.radioButtonMastodon.AutoSize = true;
+            this.radioButtonMastodon.Checked = true;
             this.radioButtonMastodon.Location = new System.Drawing.Point(77, 9);
             this.radioButtonMastodon.Name = "radioButtonMastodon";
             this.radioButtonMastodon.Size = new System.Drawing.Size(72, 16);
             this.radioButtonMastodon.TabIndex = 1;
+            this.radioButtonMastodon.TabStop = true;
             this.radioButtonMastodon.Text = "Mastodon";
             this.radioButtonMastodon.UseVisualStyleBackColor = true;
             // 

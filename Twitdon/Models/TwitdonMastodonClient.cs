@@ -30,6 +30,16 @@ namespace Twitdon.Models
         #region プロパティ
 
         /// <summary>
+        /// 紐付けられているユーザーの @user@pawoo.net のようなアカウント名。
+        /// </summary>
+        public string AccountName { get; private set; }
+
+        /// <summary>
+        /// 紐付けられているユーザーのアイコンの URL。
+        /// </summary>
+        public string Icon { get; private set; }
+
+        /// <summary>
         /// インスタンスのドメイン。
         /// </summary>
         public string Instance { get; private set; }
@@ -59,11 +69,6 @@ namespace Twitdon.Models
         {
             get { return client.GetPublicStreaming(); }
         }
-
-        /// <summary>
-        /// 紐付けられているユーザーの @user@pawoo.net のようなアカウント名。
-        /// </summary>
-        public string AccountName { get; private set; }
 
         #endregion
 
@@ -131,6 +136,7 @@ namespace Twitdon.Models
             client = new MastodonClient(appRegistration, auth);
             var user = await client.GetCurrentUser();
             AccountName = $"{user.UserName}@{Instance}";
+            Icon = user.AvatarUrl;
             return client;
         }
 

@@ -117,6 +117,7 @@ namespace Twitdon
         public RegisterForm()
         {
             InitializeComponent();
+            ChangePanel();
         }
 
         #endregion

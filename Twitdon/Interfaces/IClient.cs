@@ -14,6 +14,11 @@ namespace Twitdon.Interfaces
         /// </summary>
         string AccountName { get; }
 
+        /// <summary>
+        /// 紐付けられているユーザーのアイコンの URL。
+        /// </summary>
+        string Icon { get; }
+
         #endregion
 
         #region public メソッド
