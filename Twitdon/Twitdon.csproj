@@ -148,10 +148,13 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\TimeLineStatus.cs">
+    <Compile Include="Define.cs" />
+    <Compile Include="Interfaces\ITimeLine.cs" />
+    <Compile Include="Models\TimeLineMastodon.cs" />
+    <Compile Include="UserControls\TimeLineStatus.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Components\TimeLineStatus.Designer.cs">
+    <Compile Include="UserControls\TimeLineStatus.Designer.cs">
       <DependentUpon>TimeLineStatus.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IClient.cs" />
@@ -178,14 +181,14 @@
     <Compile Include="Forms\RegisterForm.designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\TimeLineFrame.cs">
+    <Compile Include="UserControls\TimeLineFrame.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Components\TimeLineFrame.Designer.cs">
+    <Compile Include="UserControls\TimeLineFrame.Designer.cs">
       <DependentUpon>TimeLineFrame.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities.cs" />
-    <EmbeddedResource Include="Components\TimeLineStatus.resx">
+    <EmbeddedResource Include="UserControls\TimeLineStatus.resx">
       <DependentUpon>TimeLineStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
@@ -207,7 +210,7 @@
     <EmbeddedResource Include="Forms\RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Components\TimeLineFrame.resx">
+    <EmbeddedResource Include="UserControls\TimeLineFrame.resx">
       <DependentUpon>TimeLineFrame.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

@@ -7,6 +7,17 @@ namespace Twitdon.Interfaces
     /// </summary>
     public interface IClient
     {
+        #region プロパティ
+
+        /// <summary>
+        /// 紐付けられているユーザーの @user@pawoo.net のようなアカウント名。
+        /// </summary>
+        string AccountName { get; }
+
+        #endregion
+
+        #region public メソッド
+
         /// <summary>
         /// ツイート/トゥートします。
         /// </summary>
@@ -27,5 +38,7 @@ namespace Twitdon.Interfaces
         /// <param name="statusId">お気に入り解除するツイート/トゥートのID。</param>
         /// <returns>ツイート/トゥート内容。</returns>
         Task<IStatus> Unfavourite(int statusId);
+
+        #endregion
     }
 }

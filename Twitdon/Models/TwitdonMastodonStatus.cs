@@ -20,11 +20,43 @@ namespace Twitdon.Models
         #region プロパティ
 
         /// <summary>
+        /// @user などのユーザ名です。リプライに使われます。
+        /// </summary>
+        public string ScreenName
+        {
+            get { return status.Account.UserName; }
+        }
+
+        /// <summary>
+        /// @user@pawoo.net などのユーザ名です。ステータス表示に使われます。
+        /// </summary>
+        public string AccountName
+        {
+            get { return status.Account.AccountName; }
+        }
+
+        /// <summary>
+        /// 識別に用いられないユーザ表示名です。
+        /// </summary>
+        public string UserName
+        {
+            get { return status.Account.DisplayName; }
+        }
+
+        /// <summary>
         /// トゥートの文章です。
         /// </summary>
         public string Content
         {
             get { return status.Content; }
+        }
+
+        /// <summary>
+        /// アイコンの URL です。
+        /// </summary>
+        public string Icon
+        {
+            get { return status.Account.AvatarUrl; }
         }
 
         #endregion

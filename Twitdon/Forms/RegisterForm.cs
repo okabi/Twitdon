@@ -1,9 +1,7 @@
 ﻿using log4net;
-using Mastonet;
-using Mastonet.Entities;
 using System;
 using System.Reflection;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
 using Twitdon.Models;
@@ -105,7 +103,7 @@ namespace Twitdon
         }
 
         /// <summary>
-        /// 登録された Twitter / Mastodon のクライアントです。
+        /// 設定されたクライアント。null なら未設定か設定に失敗しています。
         /// </summary>
         public IClient Client { get; private set; }
 
@@ -135,76 +133,32 @@ namespace Twitdon
         }
 
         /// <summary>
-        /// 非同期タスク中でプログレスフォームを更新します。また、キャンセルが押されたかを返します。
+        /// フォームの内容から Mastodon アクセストークンを取得し、クライアントを作成して Close します。
         /// </summary>
-        /// <param name="form">進捗状況を表すフォーム。</param>
-        /// <param name="token">処理キャンセルを監視するトークン。</param>
-        /// <param name="progress">プログレスバーの表示(0~100)。</param>
-        /// <param name="message">プログレスフォームに表示する現在の作業メッセージ。</param>
-        /// <returns>キャンセルが押されたか。</returns>
-        private bool UpdateProgressForm(ProgressForm form, CancellationToken token, int progress, string message)
+        private async Task RegisterMastodon()
         {
-            if (token.IsCancellationRequested)
+            // 既に登録されている内容ならエラー
+            if (Settings.Default.MastodonDomains.Contains(MastodonDomain) && Settings.Default.MastodonEMails.Contains(MastodonEMail))
             {
-                // 中断命令が出された
-                return true;
-            }
-            Invoke(
-                (MethodInvoker)(() =>
-                {
-                    form.Progress = progress;
-                    form.Message = message;
-                }));
-            return false;
-        }
-
-        private void RegisterTwitter(ProgressForm form, CancellationToken token) { }
-
-        /// <summary>
-        /// フォームの内容から Mastodon アクセストークンを取得し、クライアントを作成します。
-        /// </summary>
-        /// <param name="form">進捗状況を表すフォーム。</param>
-        /// <param name="token">処理キャンセルを監視するトークン。</param>
-        private async void RegisterMastodon(ProgressForm form, CancellationToken token)
-        {
-            // Mastodon Instance へのアプリケーションの登録
-            if (UpdateProgressForm(form, token, 0, $"{MastodonDomain}: アプリケーション登録中です..."))
-            {
-                return;
-            }
-            AuthenticationClient authClient;
-            AppRegistration appRegistration;
-            try
-            {
-                authClient = new AuthenticationClient(MastodonDomain);
-                appRegistration = await authClient.CreateApp(Assembly.GetExecutingAssembly().GetName().Name, Scope.Read | Scope.Write | Scope.Follow);
-            }
-            catch (Exception e)
-            {
-                logger.ErrorFormat($"{MastodonDomain}: サーバ接続に失敗 - {e.Message}");
-                Utilities.ShowError($"{MastodonDomain} に接続できません。\nドメイン名を確認してください。");
+                logger.ErrorFormat($"既に登録されているアカウントです。");
+                Utilities.ShowError($"既に登録されているアカウントです。");
                 return;
             }
 
-            // アクセストークンの取得
-            if (UpdateProgressForm(form, token, 50, $"{MastodonDomain}: アクセストークン取得中です..."))
+            // アカウントに接続
+            var client = new TwitdonMastodonClient(MastodonDomain, MastodonEMail, MastodonPassword);
+            var result = await client.CreateClient(true);
+            if (result == null)
             {
-                return;
-            }
-            Auth auth;
-            try
-            {
-                auth = await authClient.ConnectWithPassword(MastodonEMail, MastodonPassword);
-            }
-            catch (Exception e)
-            {
-                logger.ErrorFormat($"{MastodonDomain}: アカウントへの接続に失敗 - {e.Message}");
-                Utilities.ShowError("アカウントに接続できません。\nメールアドレス・パスワードを確認してください。");
                 return;
             }
 
-            // クライアントを作成
-            Client = new TwitdonMastodonClient(appRegistration, auth);
+            // アカウント情報を保存して終了
+            Settings.Default.MastodonDomains.Add(MastodonDomain);
+            Settings.Default.MastodonEMails.Add(MastodonEMail);
+            Settings.Default.MastodonPasswords.Add(MastodonPassword);
+            Client = client;
+            Invoke((MethodInvoker)(() => Close()));
         }
 
         #endregion
@@ -227,18 +181,9 @@ namespace Twitdon
             ChangePanel();
         }
 
-        private void buttonRegister_Click(object sender, EventArgs e)
+        private async void buttonRegister_Click(object sender, EventArgs e)
         {
-            using (var f = new ProgressForm())
-            {
-                f.AsyncTask = RegisterTwitter;
-                if (IsMastodon)
-                {
-                    f.AsyncTask = RegisterMastodon;
-                }
-                f.StartPosition = FormStartPosition.CenterScreen;
-                f.ShowDialog();
-            }
+            await RegisterMastodon();
         }
 
         #endregion

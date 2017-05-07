@@ -34,5 +34,49 @@ namespace Twitdon.Properties {
                 this["MastodonDomain"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection MastodonDomains {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MastodonDomains"]));
+            }
+            set {
+                this["MastodonDomains"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection MastodonEMails {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MastodonEMails"]));
+            }
+            set {
+                this["MastodonEMails"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection MastodonPasswords {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MastodonPasswords"]));
+            }
+            set {
+                this["MastodonPasswords"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Timelines {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Timelines"]));
+            }
+            set {
+                this["Timelines"] = value;
+            }
+        }
     }
 }
