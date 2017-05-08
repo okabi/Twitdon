@@ -70,6 +70,7 @@ namespace Twitdon
             Invoke(
                 (MethodInvoker)(() =>
                 {
+                    Utilities.BeginUpdate(this);
                     timeline.Update();
                     int y = 0;
                     for (int i = timeline.Count - 1; i >= 0; i--)
@@ -78,6 +79,7 @@ namespace Twitdon
                         timeline[i].UpdateUI();
                         y += timeline[i].Size.Height;
                     }
+                    Utilities.EndUpdate(this);
                 }));
         }
 
