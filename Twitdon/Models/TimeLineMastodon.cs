@@ -36,6 +36,11 @@ namespace Twitdon.Models
         /// </summary>
         private readonly TimelineStreaming streaming;
 
+        /// <summary>
+        /// タイムライン追加待ちのステータス。
+        /// </summary>
+        private Queue<TwitdonMastodonStatus> fetchedStatuses;
+
         #endregion
 
         #region プロパティ
@@ -86,10 +91,12 @@ namespace Twitdon.Models
         /// <param name="name">タイムライン名。</param>
         public TimeLineMastodon(TwitdonMastodonClient client, TimelineStreaming streaming, string name)
         {
+            // 初期化
             this.client = client;
             this.streaming = streaming;
             TimeLineName = $"{name}{client.AccountName}";
             statuses = new List<TimeLineStatus>(Define.StatusesCapacity);
+            fetchedStatuses = new Queue<TwitdonMastodonStatus>();
         }
 
         #endregion
@@ -97,27 +104,55 @@ namespace Twitdon.Models
         #region public メソッド
 
         /// <summary>
-        /// タイムラインにステータスコントロールを追加します。キャパシティオーバーして古いステータスを削除した場合 true を返します。
+        /// タイムラインにステータスコントロールを追加します。
+        /// 実際には、画面のちらつきを抑えるために一定時間ごとにバッファされたステータスを
+        /// 一度に更新しています。
         /// </summary>
         /// <param name="status">追加するステータス。</param>
         public void AddStatus(IStatus status)
         {
+            fetchedStatuses.Enqueue(status as TwitdonMastodonStatus);
+        }
+
+        /// <summary>
+        /// タイムライン追加待ちのステータスがあれば追加してコントロールを更新します。
+        /// </summary>
+        public void Update()
+        {
+            // 例外処理
+            if (fetchedStatuses.Count == 0)
+            {
+                return;
+            }
             if (Panel == null)
             {
                 logger.Error("タイムライン枠が未割り当てです。");
                 Utilities.ShowError("タイムライン枠が未割り当てです。");
                 return;
             }
-            if (statuses.Count >= Define.StatusesCapacity)
+
+            // キャパシティオーバーしている分は取得データを捨てる
+            while (fetchedStatuses.Count > Define.StatusesCapacity)
+            {
+                fetchedStatuses.Dequeue();
+            }
+            int deleteNum = statuses.Count + fetchedStatuses.Count - Define.StatusesCapacity;
+            for (int i = 0; i < deleteNum; i++)
             {
                 Panel.Controls.RemoveAt(0);
                 statuses.RemoveAt(0);
             }
-            var st = new TimeLineStatus(status);
-            st.Size = new Size(Panel.ClientSize.Width, 130);
-            st.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-            statuses.Add(st);
-            Panel.Controls.Add(st);
+
+            // ステータスをタイムラインに追加
+            while (fetchedStatuses.Count > 0)
+            {
+                var status = fetchedStatuses.Dequeue();
+                var st = new TimeLineStatus(status);
+                st.Size = new Size(Panel.ClientSize.Width, st.ClientSize.Height);
+                st.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                statuses.Add(st);
+                Panel.Controls.Add(st);
+            }
         }
 
         /// <summary>

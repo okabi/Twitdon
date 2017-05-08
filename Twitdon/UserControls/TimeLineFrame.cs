@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
 using Twitdon.Models;
+using Timer = System.Timers;
 
 namespace Twitdon
 {
@@ -28,7 +30,8 @@ namespace Twitdon
         public TimeLineFrame(ITimeLine timeline)
         {
             InitializeComponent();
-            panel.MouseWheel += Panel_MouseWheel; ;
+            SetStyle(ControlStyles.Opaque, true);
+            panel.MouseWheel += Panel_MouseWheel;
 
             // タイムラインにこの枠を紐付ける
             this.timeline = timeline;
@@ -41,10 +44,18 @@ namespace Twitdon
                 var tl = timeline as TimeLineMastodon;
                 tl.AddOnUpdate((_, e) =>
                 {
-                    AddStatus(new TwitdonMastodonStatus(e.Status));
+                    tl.AddStatus(new TwitdonMastodonStatus(e.Status));
                 });
                 tl.Start();
             }
+
+            // タイマーイベントの追加
+            var timer = new Timer.Timer();
+            timer.Elapsed += new Timer.ElapsedEventHandler(Timer_Update);
+            timer.Interval = 1000;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+
         }
 
         #endregion
@@ -52,30 +63,24 @@ namespace Twitdon
         #region private メソッド
 
         /// <summary>
-        /// タイムラインにステータスを追加して反映します。
-        /// </summary>
-        /// <param name="status">追加するステータス。</param>
-        private void AddStatus(IStatus status)
-        {
-            // ステータスを追加
-            timeline.AddStatus(status);
-
-            // 各コントロールの描画位置を調整
-            UpdateUI();
-        }
-
-        /// <summary>
         /// タイムラインの表示を調整します。
         /// </summary>
         private void UpdateUI()
         {
-            int y = 0;
-            for (int i = timeline.Count - 1; i >= 0; i--)
-            {
-                timeline[i].Location = new Point(0, y);
-                timeline[i].UpdateUI();
-                y += timeline[i].Size.Height;
-            }
+            Invoke(
+                (MethodInvoker)(() =>
+                {
+                    Utilities.BeginUpdate(this);
+                    timeline.Update();
+                    int y = 0;
+                    for (int i = timeline.Count - 1; i >= 0; i--)
+                    {
+                        timeline[i].Location = new Point(0, y);
+                        timeline[i].UpdateUI();
+                        y += timeline[i].Size.Height;
+                    }
+                    Utilities.EndUpdate(this);
+                }));
         }
 
         #endregion
@@ -88,6 +93,11 @@ namespace Twitdon
         }
 
         private void Panel_MouseWheel(object sender, MouseEventArgs e)
+        {
+            UpdateUI();
+        }
+
+        private void Timer_Update(object sender, EventArgs e)
         {
             UpdateUI();
         }
