@@ -30,12 +30,12 @@
         {
             this.labelUser = new System.Windows.Forms.Label();
             this.labelInfo = new System.Windows.Forms.Label();
-            this.labelContent = new System.Windows.Forms.Label();
             this.pictureDelete = new System.Windows.Forms.PictureBox();
             this.pictureFavorite = new System.Windows.Forms.PictureBox();
             this.pictureReblog = new System.Windows.Forms.PictureBox();
             this.pictureReply = new System.Windows.Forms.PictureBox();
             this.pictureBoxIcon = new System.Windows.Forms.PictureBox();
+            this.labelContent = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureDelete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureFavorite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureReblog)).BeginInit();
@@ -67,21 +67,6 @@
             this.labelInfo.TabIndex = 3;
             this.labelInfo.Text = "1分前 via Web";
             this.labelInfo.Visible = false;
-            // 
-            // labelContent
-            // 
-            this.labelContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelContent.AutoEllipsis = true;
-            this.labelContent.AutoSize = true;
-            this.labelContent.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.labelContent.Location = new System.Drawing.Point(57, 23);
-            this.labelContent.MaximumSize = new System.Drawing.Size(352, 0);
-            this.labelContent.Name = "labelContent";
-            this.labelContent.Size = new System.Drawing.Size(347, 40);
-            this.labelContent.TabIndex = 6;
-            this.labelContent.Text = "あああああああああああああああああああああああああああああああああああああ";
-            this.labelContent.UseMnemonic = false;
             // 
             // pictureDelete
             // 
@@ -140,14 +125,30 @@
             this.pictureBoxIcon.TabIndex = 8;
             this.pictureBoxIcon.TabStop = false;
             // 
+            // labelContent
+            // 
+            this.labelContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelContent.AutoEllipsis = true;
+            this.labelContent.AutoSize = true;
+            this.labelContent.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelContent.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.labelContent.Location = new System.Drawing.Point(57, 23);
+            this.labelContent.MaximumSize = new System.Drawing.Size(352, 0);
+            this.labelContent.Name = "labelContent";
+            this.labelContent.Size = new System.Drawing.Size(347, 40);
+            this.labelContent.TabIndex = 9;
+            this.labelContent.Text = "あああああああああああああああああああああああああああああああああああああ";
+            this.labelContent.UseMnemonic = false;
+            // 
             // TimeLineStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.Controls.Add(this.labelContent);
             this.Controls.Add(this.pictureBoxIcon);
             this.Controls.Add(this.pictureDelete);
-            this.Controls.Add(this.labelContent);
             this.Controls.Add(this.pictureFavorite);
             this.Controls.Add(this.pictureReblog);
             this.Controls.Add(this.labelInfo);
@@ -172,8 +173,8 @@
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.PictureBox pictureReblog;
         private System.Windows.Forms.PictureBox pictureFavorite;
-        private System.Windows.Forms.Label labelContent;
         private System.Windows.Forms.PictureBox pictureDelete;
         private System.Windows.Forms.PictureBox pictureBoxIcon;
+        private System.Windows.Forms.LinkLabel labelContent;
     }
 }
