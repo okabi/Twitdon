@@ -36,12 +36,17 @@ namespace Twitdon.Interfaces
         #region public メソッド
 
         /// <summary>
-        /// タイムラインにステータスコントロールを追加します。キャパシティオーバーして古いステータスを削除した場合 true を返します。
+        /// タイムラインにステータスコントロールを追加します。
         /// </summary>
         /// <param name="status">追加するステータス。</param>
         void AddStatus(IStatus status);
 
-            /// <summary>
+        /// <summary>
+        /// タイムライン追加待ちのステータスがあれば追加してコントロールを更新します。
+        /// </summary>
+        void Update();
+
+        /// <summary>
         /// ストリーミングを開始します。
         /// </summary>
         void Start();

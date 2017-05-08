@@ -61,7 +61,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfo.AutoSize = true;
             this.labelInfo.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.labelInfo.Location = new System.Drawing.Point(58, 84);
+            this.labelInfo.Location = new System.Drawing.Point(58, 86);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(89, 18);
             this.labelInfo.TabIndex = 3;
@@ -88,7 +88,7 @@
             this.pictureDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureDelete.Image = global::Twitdon.Properties.Resources.delete;
-            this.pictureDelete.Location = new System.Drawing.Point(393, 108);
+            this.pictureDelete.Location = new System.Drawing.Point(395, 110);
             this.pictureDelete.Name = "pictureDelete";
             this.pictureDelete.Size = new System.Drawing.Size(16, 16);
             this.pictureDelete.TabIndex = 7;
@@ -100,7 +100,7 @@
             this.pictureFavorite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureFavorite.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureFavorite.Image = global::Twitdon.Properties.Resources.star_before;
-            this.pictureFavorite.Location = new System.Drawing.Point(371, 108);
+            this.pictureFavorite.Location = new System.Drawing.Point(373, 110);
             this.pictureFavorite.Name = "pictureFavorite";
             this.pictureFavorite.Size = new System.Drawing.Size(16, 16);
             this.pictureFavorite.TabIndex = 5;
@@ -112,7 +112,7 @@
             this.pictureReblog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureReblog.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureReblog.Image = global::Twitdon.Properties.Resources.reblog_before;
-            this.pictureReblog.Location = new System.Drawing.Point(349, 108);
+            this.pictureReblog.Location = new System.Drawing.Point(351, 110);
             this.pictureReblog.Name = "pictureReblog";
             this.pictureReblog.Size = new System.Drawing.Size(16, 16);
             this.pictureReblog.TabIndex = 4;
@@ -124,7 +124,7 @@
             this.pictureReply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureReply.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureReply.Image = global::Twitdon.Properties.Resources.reply;
-            this.pictureReply.Location = new System.Drawing.Point(327, 108);
+            this.pictureReply.Location = new System.Drawing.Point(329, 110);
             this.pictureReply.Name = "pictureReply";
             this.pictureReply.Size = new System.Drawing.Size(16, 16);
             this.pictureReply.TabIndex = 2;
@@ -145,7 +145,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.pictureBoxIcon);
             this.Controls.Add(this.pictureDelete);
             this.Controls.Add(this.labelContent);
@@ -155,7 +154,7 @@
             this.Controls.Add(this.pictureReply);
             this.Controls.Add(this.labelUser);
             this.Name = "TimeLineStatus";
-            this.Size = new System.Drawing.Size(412, 127);
+            this.Size = new System.Drawing.Size(414, 129);
             ((System.ComponentModel.ISupportInitialize)(this.pictureDelete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureFavorite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureReblog)).EndInit();

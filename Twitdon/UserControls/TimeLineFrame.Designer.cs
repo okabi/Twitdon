@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.labelTimeLineName = new System.Windows.Forms.Label();
-            this.panel = new System.Windows.Forms.Panel();
+            this.panel = new Twitdon.ScrollablePanel();
             this.SuspendLayout();
             // 
             // labelTimeLineName
@@ -55,7 +55,7 @@
             this.panel.Margin = new System.Windows.Forms.Padding(0);
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(324, 396);
-            this.panel.TabIndex = 1;
+            this.panel.TabIndex = 2;
             this.panel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panel_Scroll);
             // 
             // TimeLineFrame
@@ -75,6 +75,6 @@
         #endregion
 
         private System.Windows.Forms.Label labelTimeLineName;
-        private System.Windows.Forms.Panel panel;
+        private ScrollablePanel panel;
     }
 }

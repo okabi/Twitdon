@@ -24,6 +24,7 @@ namespace Twitdon
         public TimeLineStatus(IStatus status)
         {
             InitializeComponent();
+            DoubleBuffered = true;
 
             Status = status;
             UpdateUI();
