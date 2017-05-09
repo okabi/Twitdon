@@ -140,6 +140,7 @@
             this.labelContent.TabIndex = 9;
             this.labelContent.Text = "あああああああああああああああああああああああああああああああああああああ";
             this.labelContent.UseMnemonic = false;
+            this.labelContent.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelContent_LinkClicked);
             // 
             // TimeLineStatus
             // 

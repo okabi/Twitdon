@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -62,7 +63,7 @@ namespace Twitdon
                 content = regex.Replace(content, text, 1);
                 match = regex.Match(content);
             }
-            labelContent.Text = content + " ";
+            labelContent.Text = content;
             labelContent.Links.Clear();
             try
             {
@@ -83,6 +84,16 @@ namespace Twitdon
             var pictureHeight = pictureBoxIcon.Location.Y + pictureBoxIcon.Size.Height + pictureBoxIcon.Margin.Bottom;
             var contentHeight = labelContent.Location.Y + labelContent.Size.Height + labelContent.Margin.Bottom;
             Size = new Size(Size.Width, pictureHeight > contentHeight ? pictureHeight : contentHeight);
+        }
+
+        #endregion
+
+        #region イベントハンドラ
+
+        private void labelContent_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(e.Link.LinkData as string);
+            e.Link.Visited = true;
         }
 
         #endregion

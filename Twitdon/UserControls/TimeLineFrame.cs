@@ -67,20 +67,27 @@ namespace Twitdon
         /// </summary>
         private void UpdateUI()
         {
-            Invoke(
-                (MethodInvoker)(() =>
-                {
-                    Utilities.BeginUpdate(this);
-                    timeline.Update();
-                    int y = 0;
-                    for (int i = timeline.Count - 1; i >= 0; i--)
+            try
+            {
+                Invoke(
+                    (MethodInvoker)(() =>
                     {
-                        timeline[i].Location = new Point(0, y);
-                        timeline[i].UpdateUI();
-                        y += timeline[i].Size.Height;
-                    }
-                    Utilities.EndUpdate(this);
-                }));
+                        Utilities.BeginUpdate(this);
+                        timeline.Update();
+                        int y = 0;
+                        for (int i = timeline.Count - 1; i >= 0; i--)
+                        {
+                            timeline[i].Location = new Point(0, y);
+                            timeline[i].UpdateUI();
+                            y += timeline[i].Size.Height;
+                        }
+                        Utilities.EndUpdate(this);
+                    }));
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         #endregion
