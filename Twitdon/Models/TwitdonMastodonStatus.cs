@@ -44,19 +44,27 @@ namespace Twitdon.Models
         }
 
         /// <summary>
-        /// トゥートの文章です。
-        /// </summary>
-        public string Content
-        {
-            get { return status.Content; }
-        }
-
-        /// <summary>
         /// アイコンの URL です。
         /// </summary>
         public string Icon
         {
             get { return status.Account.AvatarUrl; }
+        }
+
+        /// <summary>
+        /// ステータスを投稿したユーザの URL です。
+        /// </summary>
+        public string AccountUrl
+        {
+            get { return status.Account.ProfileUrl; }
+        }
+
+        /// <summary>
+        /// トゥートの文章です。
+        /// </summary>
+        public string Content
+        {
+            get { return status.Content; }
         }
 
         #endregion
