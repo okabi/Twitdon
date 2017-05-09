@@ -28,6 +28,11 @@
         string Icon { get; }
 
         /// <summary>
+        /// ステータスを投稿したユーザの URL です。
+        /// </summary>
+        string AccountUrl { get; }
+
+        /// <summary>
         /// ツイート/トゥートの文章です。
         /// </summary>
         string Content { get; }

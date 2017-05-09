@@ -118,12 +118,14 @@
             // 
             // pictureBoxIcon
             // 
+            this.pictureBoxIcon.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxIcon.Location = new System.Drawing.Point(3, 3);
             this.pictureBoxIcon.Name = "pictureBoxIcon";
             this.pictureBoxIcon.Size = new System.Drawing.Size(48, 48);
             this.pictureBoxIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxIcon.TabIndex = 8;
             this.pictureBoxIcon.TabStop = false;
+            this.pictureBoxIcon.Click += new System.EventHandler(this.pictureBoxIcon_Click);
             // 
             // labelContent
             // 
