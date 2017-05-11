@@ -49,6 +49,10 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CoreTweet, Version=0.8.0.384, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoreTweet.0.8.0.384\lib\net45\CoreTweet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -152,6 +156,8 @@
     <Compile Include="Define.cs" />
     <Compile Include="Interfaces\ITimeLine.cs" />
     <Compile Include="Models\TimeLineMastodon.cs" />
+    <Compile Include="Models\TwitdonTwitterClient.cs" />
+    <Compile Include="SecretDefine.cs" />
     <Compile Include="UserControls\ScrollablePanel.cs">
       <SubType>Component</SubType>
     </Compile>

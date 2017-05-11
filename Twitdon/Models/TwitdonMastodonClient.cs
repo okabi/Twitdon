@@ -21,6 +21,21 @@ namespace Twitdon.Models
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
+        /// インスタンスのドメイン。
+        /// </summary>
+        private readonly string instance;
+
+        /// <summary>
+        /// ユーザのメールアドレス。
+        /// </summary>
+        private readonly string email;
+
+        /// <summary>
+        /// ユーザのパスワード。
+        /// </summary>
+        private readonly string password;
+
+        /// <summary>
         /// クライアントの本体。
         /// </summary>
         private MastodonClient client;
@@ -38,21 +53,6 @@ namespace Twitdon.Models
         /// 紐付けられているユーザーのアイコンの URL。
         /// </summary>
         public string Icon { get; private set; }
-
-        /// <summary>
-        /// インスタンスのドメイン。
-        /// </summary>
-        public string Instance { get; private set; }
-
-        /// <summary>
-        /// ユーザのメールアドレス。
-        /// </summary>
-        public string EMail { get; private set; }
-
-        /// <summary>
-        /// ユーザのパスワード。
-        /// </summary>
-        public string Password { get; private set; }
 
         /// <summary>
         /// ユーザーストリーミング。
@@ -82,9 +82,9 @@ namespace Twitdon.Models
         /// <param name="password">ユーザのパスワード。</param>
         public TwitdonMastodonClient(string instance, string email, string password)
         {
-            Instance = instance;
-            EMail = email;
-            Password = password;
+            this.instance = instance;
+            this.email = email;
+            this.password = password;
         }
 
         #endregion
@@ -103,15 +103,15 @@ namespace Twitdon.Models
             AppRegistration appRegistration;
             try
             {
-                authClient = new AuthenticationClient(Instance);
+                authClient = new AuthenticationClient(instance);
                 appRegistration = await authClient.CreateApp(Assembly.GetExecutingAssembly().GetName().Name, Scope.Read | Scope.Write | Scope.Follow);
             }
             catch (Exception e)
             {
-                logger.ErrorFormat($"{Instance}: サーバ接続に失敗 - {e.Message}");
+                logger.ErrorFormat($"{instance}: サーバ接続に失敗 - {e.Message}");
                 if (showError)
                 {
-                    Utilities.ShowError($"{Instance} に接続できません。\nドメイン名を確認してください。");
+                    Utilities.ShowError($"{instance} に接続できません。\nドメイン名を確認してください。");
                 }
                 return null;
             }
@@ -120,11 +120,11 @@ namespace Twitdon.Models
             Auth auth;
             try
             {
-                auth = await authClient.ConnectWithPassword(EMail, Password);
+                auth = await authClient.ConnectWithPassword(email, password);
             }
             catch (Exception e)
             {
-                logger.ErrorFormat($"{Instance}: アカウントへの接続に失敗 - {e.Message}");
+                logger.ErrorFormat($"{instance}: アカウントへの接続に失敗 - {e.Message}");
                 if (showError)
                 {
                     Utilities.ShowError("アカウントに接続できません。\nメールアドレス・パスワードを確認してください。");
@@ -135,7 +135,7 @@ namespace Twitdon.Models
             // クライアントを作成
             client = new MastodonClient(appRegistration, auth);
             var user = await client.GetCurrentUser();
-            AccountName = $"{user.UserName}@{Instance}";
+            AccountName = $"{user.UserName}@{instance}";
             Icon = user.AvatarUrl;
             return client;
         }

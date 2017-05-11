@@ -103,6 +103,36 @@ namespace Twitdon
         }
 
         /// <summary>
+        /// 登録する Twitter インスタンスのメールアドレスです。
+        /// </summary>
+        public string TwitterEMail
+        {
+            get
+            {
+                return textBoxTwitterEMail.Text;
+            }
+            set
+            {
+                textBoxTwitterEMail.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// 登録する Twitter インスタンスのパスワードです。
+        /// </summary>
+        public string TwitterPassword
+        {
+            get
+            {
+                return textBoxTwitterPassword.Text;
+            }
+            set
+            {
+                textBoxTwitterPassword.Text = value;
+            }
+        }
+
+        /// <summary>
         /// 設定されたクライアント。null なら未設定か設定に失敗しています。
         /// </summary>
         public IClient Client { get; private set; }
@@ -129,8 +159,22 @@ namespace Twitdon
         /// </summary>
         private void ChangePanel()
         {
-            panelTwitter.Visible = radioButtonTwitter.Checked;
-            panelMastodon.Visible = radioButtonMastodon.Checked;
+            panelTwitter.Visible = IsTwitter;
+            panelMastodon.Visible = IsMastodon;
+        }
+
+        /// <summary>
+        /// フォームの内容から Twitter アクセストークンを取得し、クライアントを作成して Close します。
+        /// </summary>
+        private async Task RegisterTwitter()
+        {
+            // アカウントに接続
+            var client = new TwitdonTwitterClient(TwitterEMail, TwitterPassword);
+            var result = await client.CreateClient(true);
+            if (result == null)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -162,6 +206,19 @@ namespace Twitdon
             Invoke((MethodInvoker)(() => Close()));
         }
 
+        /// <summary>
+        /// コントロールの Enabled を一斉に更新します。
+        /// </summary>
+        /// <param name="enabled">新しく設定する Enabled の値。</param>
+        private void ChangeUIEnabled(bool enabled)
+        {
+            panelServices.Enabled = enabled;
+            panelTwitter.Enabled = enabled;
+            panelMastodon.Enabled = enabled;
+            buttonRegister.Enabled = enabled;
+            buttonRegister.Text = enabled ? "登録する" : "処理中...";
+        }
+
         #endregion
 
         #region イベントハンドラ
@@ -184,7 +241,16 @@ namespace Twitdon
 
         private async void buttonRegister_Click(object sender, EventArgs e)
         {
-            await RegisterMastodon();
+            Invoke((MethodInvoker)(() => ChangeUIEnabled(false)));
+            if (IsTwitter)
+            {
+                await RegisterTwitter();
+            }
+            else
+            {
+                await RegisterMastodon();
+            }
+            Invoke((MethodInvoker)(() => ChangeUIEnabled(true)));
         }
 
         #endregion
