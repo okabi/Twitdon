@@ -31,6 +31,11 @@
             this.radioButtonTwitter = new System.Windows.Forms.RadioButton();
             this.radioButtonMastodon = new System.Windows.Forms.RadioButton();
             this.panelTwitter = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxTwitterPassword = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBoxTwitterEMail = new System.Windows.Forms.TextBox();
             this.panelMastodon = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxMastodonPassword = new System.Windows.Forms.TextBox();
@@ -41,11 +46,8 @@
             this.textBoxMastodonDomain = new System.Windows.Forms.TextBox();
             this.buttonRegister = new System.Windows.Forms.Button();
             this.panelServices = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxTwitterPassword = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBoxTwitterEMail = new System.Windows.Forms.TextBox();
+            this.labelProgress = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.panelTwitter.SuspendLayout();
             this.panelMastodon.SuspendLayout();
             this.panelServices.SuspendLayout();
@@ -87,6 +89,48 @@
             this.panelTwitter.Name = "panelTwitter";
             this.panelTwitter.Size = new System.Drawing.Size(341, 110);
             this.panelTwitter.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(89, 60);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(52, 12);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "パスワード";
+            // 
+            // textBoxTwitterPassword
+            // 
+            this.textBoxTwitterPassword.Location = new System.Drawing.Point(147, 57);
+            this.textBoxTwitterPassword.Name = "textBoxTwitterPassword";
+            this.textBoxTwitterPassword.PasswordChar = '●';
+            this.textBoxTwitterPassword.Size = new System.Drawing.Size(182, 19);
+            this.textBoxTwitterPassword.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 12);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(165, 12);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "アカウント情報を入力してください。";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(12, 35);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(129, 12);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "ユーザ名 or メールアドレス";
+            // 
+            // textBoxTwitterEMail
+            // 
+            this.textBoxTwitterEMail.Location = new System.Drawing.Point(147, 32);
+            this.textBoxTwitterEMail.Name = "textBoxTwitterEMail";
+            this.textBoxTwitterEMail.Size = new System.Drawing.Size(182, 19);
+            this.textBoxTwitterEMail.TabIndex = 9;
             // 
             // panelMastodon
             // 
@@ -183,47 +227,24 @@
             this.panelServices.Size = new System.Drawing.Size(341, 28);
             this.panelServices.TabIndex = 5;
             // 
-            // label1
+            // labelProgress
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(89, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 12);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "パスワード";
+            this.labelProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelProgress.AutoSize = true;
+            this.labelProgress.Location = new System.Drawing.Point(12, 163);
+            this.labelProgress.Name = "labelProgress";
+            this.labelProgress.Size = new System.Drawing.Size(47, 12);
+            this.labelProgress.TabIndex = 6;
+            this.labelProgress.Text = "登録中...";
+            this.labelProgress.Visible = false;
             // 
-            // textBoxTwitterPassword
+            // progressBar
             // 
-            this.textBoxTwitterPassword.Location = new System.Drawing.Point(147, 57);
-            this.textBoxTwitterPassword.Name = "textBoxTwitterPassword";
-            this.textBoxTwitterPassword.PasswordChar = '●';
-            this.textBoxTwitterPassword.Size = new System.Drawing.Size(182, 19);
-            this.textBoxTwitterPassword.TabIndex = 12;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 12);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(165, 12);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "アカウント情報を入力してください。";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 35);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(129, 12);
-            this.label7.TabIndex = 10;
-            this.label7.Text = "ユーザ名 or メールアドレス";
-            // 
-            // textBoxTwitterEMail
-            // 
-            this.textBoxTwitterEMail.Location = new System.Drawing.Point(147, 32);
-            this.textBoxTwitterEMail.Name = "textBoxTwitterEMail";
-            this.textBoxTwitterEMail.Size = new System.Drawing.Size(182, 19);
-            this.textBoxTwitterEMail.TabIndex = 9;
+            this.progressBar.Location = new System.Drawing.Point(67, 158);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(181, 23);
+            this.progressBar.TabIndex = 7;
+            this.progressBar.Visible = false;
             // 
             // RegisterForm
             // 
@@ -231,6 +252,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(341, 193);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.labelProgress);
             this.Controls.Add(this.panelServices);
             this.Controls.Add(this.buttonRegister);
             this.Controls.Add(this.panelTwitter);
@@ -250,6 +273,7 @@
             this.panelServices.ResumeLayout(false);
             this.panelServices.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -273,5 +297,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBoxTwitterEMail;
+        private System.Windows.Forms.Label labelProgress;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }

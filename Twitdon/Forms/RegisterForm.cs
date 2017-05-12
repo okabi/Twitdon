@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
@@ -164,7 +165,21 @@ namespace Twitdon
         }
 
         /// <summary>
-        /// フォームの内容から Twitter アクセストークンを取得し、クライアントを作成して Close します。
+        /// コントロールの Enabled を一斉に更新します。
+        /// </summary>
+        /// <param name="enabled">新しく設定する Enabled の値。</param>
+        private void ChangeUIEnabled(bool enabled)
+        {
+            panelServices.Enabled = enabled;
+            panelTwitter.Enabled = enabled;
+            panelMastodon.Enabled = enabled;
+            buttonRegister.Visible = enabled;
+            labelProgress.Visible = !enabled;
+            progressBar.Visible = !enabled;
+        }
+
+        /// <summary>
+        /// フォームの内容から Twitter アクセストークンを取得し、クライアントを作成します。
         /// </summary>
         private async Task RegisterTwitter()
         {
@@ -175,10 +190,11 @@ namespace Twitdon
             {
                 return;
             }
+            Invoke((MethodInvoker)(() => progressBar.Value = 100));
         }
 
         /// <summary>
-        /// フォームの内容から Mastodon アクセストークンを取得し、クライアントを作成して Close します。
+        /// フォームの内容から Mastodon アクセストークンを取得し、クライアントを作成します。
         /// </summary>
         private async Task RegisterMastodon()
         {
@@ -189,6 +205,7 @@ namespace Twitdon
                 Utilities.ShowError($"既に登録されているアカウントです。");
                 return;
             }
+            Invoke((MethodInvoker)(() => progressBar.Value = 10));
 
             // アカウントに接続
             var client = new TwitdonMastodonClient(MastodonDomain, MastodonEMail, MastodonPassword);
@@ -197,26 +214,14 @@ namespace Twitdon
             {
                 return;
             }
+            Invoke((MethodInvoker)(() => progressBar.Value = 90));
 
             // アカウント情報を保存して終了
             Settings.Default.MastodonDomains.Add(MastodonDomain);
             Settings.Default.MastodonEMails.Add(MastodonEMail);
             Settings.Default.MastodonPasswords.Add(MastodonPassword);
             Client = client;
-            Invoke((MethodInvoker)(() => Close()));
-        }
-
-        /// <summary>
-        /// コントロールの Enabled を一斉に更新します。
-        /// </summary>
-        /// <param name="enabled">新しく設定する Enabled の値。</param>
-        private void ChangeUIEnabled(bool enabled)
-        {
-            panelServices.Enabled = enabled;
-            panelTwitter.Enabled = enabled;
-            panelMastodon.Enabled = enabled;
-            buttonRegister.Enabled = enabled;
-            buttonRegister.Text = enabled ? "登録する" : "処理中...";
+            Invoke((MethodInvoker)(() => progressBar.Value = 100));
         }
 
         #endregion
@@ -241,6 +246,7 @@ namespace Twitdon
 
         private async void buttonRegister_Click(object sender, EventArgs e)
         {
+            progressBar.Value = 0;
             Invoke((MethodInvoker)(() => ChangeUIEnabled(false)));
             if (IsTwitter)
             {
@@ -249,6 +255,11 @@ namespace Twitdon
             else
             {
                 await RegisterMastodon();
+            }
+            if (Client != null)
+            {
+                Invoke((MethodInvoker)(() => Close()));
+                return;
             }
             Invoke((MethodInvoker)(() => ChangeUIEnabled(true)));
         }

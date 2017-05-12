@@ -118,9 +118,9 @@ namespace Twitdon.Models
                 while (pin.Length == 0)
                 {
                     Application.DoEvents();
-                    if ((DateTime.Now - start).TotalSeconds > 10)
+                    if ((DateTime.Now - start).TotalSeconds > 5)
                     {
-                        // 10秒経っても接続できなければタイムアウト
+                        // 5秒経っても接続できなければタイムアウト
                         throw new Exception("PIN コードの取得でタイムアウトしました。");
                     }
                 }
