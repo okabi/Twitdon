@@ -103,6 +103,36 @@ namespace Twitdon
         }
 
         /// <summary>
+        /// 登録する Twitter インスタンスのメールアドレスです。
+        /// </summary>
+        public string TwitterEMail
+        {
+            get
+            {
+                return textBoxTwitterEMail.Text;
+            }
+            set
+            {
+                textBoxTwitterEMail.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// 登録する Twitter インスタンスのパスワードです。
+        /// </summary>
+        public string TwitterPassword
+        {
+            get
+            {
+                return textBoxTwitterPassword.Text;
+            }
+            set
+            {
+                textBoxTwitterPassword.Text = value;
+            }
+        }
+
+        /// <summary>
         /// 設定されたクライアント。null なら未設定か設定に失敗しています。
         /// </summary>
         public IClient Client { get; private set; }
@@ -129,12 +159,47 @@ namespace Twitdon
         /// </summary>
         private void ChangePanel()
         {
-            panelTwitter.Visible = radioButtonTwitter.Checked;
-            panelMastodon.Visible = radioButtonMastodon.Checked;
+            panelTwitter.Visible = IsTwitter;
+            panelMastodon.Visible = IsMastodon;
         }
 
         /// <summary>
-        /// フォームの内容から Mastodon アクセストークンを取得し、クライアントを作成して Close します。
+        /// コントロールの Enabled を一斉に更新します。
+        /// </summary>
+        /// <param name="enabled">新しく設定する Enabled の値。</param>
+        private void ChangeUIEnabled(bool enabled)
+        {
+            panelServices.Enabled = enabled;
+            panelTwitter.Enabled = enabled;
+            panelMastodon.Enabled = enabled;
+            buttonRegister.Visible = enabled;
+            labelProgress.Visible = !enabled;
+            progressBar.Visible = !enabled;
+        }
+
+        /// <summary>
+        /// フォームの内容から Twitter アクセストークンを取得し、クライアントを作成します。
+        /// </summary>
+        private async Task RegisterTwitter()
+        {
+            // TODO: 既に登録されている内容か確認する
+
+            // アカウントに接続
+            var client = new TwitdonTwitterClient(TwitterEMail, TwitterPassword);
+            var result = await client.CreateClient(true, this, progressBar);
+            if (result == null)
+            {
+                return;
+            }
+
+            // アカウント情報を保存
+            Settings.Default.TwitterAccessTokens.Add(result.AccessToken);
+            Settings.Default.TwitterAccessTokenSecrets.Add(result.AccessTokenSecret);
+            Client = client;
+        }
+
+        /// <summary>
+        /// フォームの内容から Mastodon アクセストークンを取得し、クライアントを作成します。
         /// </summary>
         private async Task RegisterMastodon()
         {
@@ -148,18 +213,17 @@ namespace Twitdon
 
             // アカウントに接続
             var client = new TwitdonMastodonClient(MastodonDomain, MastodonEMail, MastodonPassword);
-            var result = await client.CreateClient(true);
+            var result = await client.CreateClient(true, this, progressBar);
             if (result == null)
             {
                 return;
             }
 
-            // アカウント情報を保存して終了
+            // アカウント情報を保存
             Settings.Default.MastodonDomains.Add(MastodonDomain);
             Settings.Default.MastodonEMails.Add(MastodonEMail);
             Settings.Default.MastodonPasswords.Add(MastodonPassword);
             Client = client;
-            Invoke((MethodInvoker)(() => Close()));
         }
 
         #endregion
@@ -184,7 +248,22 @@ namespace Twitdon
 
         private async void buttonRegister_Click(object sender, EventArgs e)
         {
-            await RegisterMastodon();
+            progressBar.Value = 0;
+            Invoke((MethodInvoker)(() => ChangeUIEnabled(false)));
+            if (IsTwitter)
+            {
+                await RegisterTwitter();
+            }
+            else
+            {
+                await RegisterMastodon();
+            }
+            if (Client != null)
+            {
+                Invoke((MethodInvoker)(() => Close()));
+                return;
+            }
+            Invoke((MethodInvoker)(() => ChangeUIEnabled(true)));
         }
 
         #endregion

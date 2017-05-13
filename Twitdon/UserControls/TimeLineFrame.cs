@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreTweet.Streaming;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
@@ -42,10 +43,16 @@ namespace Twitdon
             if (timeline is TimeLineMastodon)
             {
                 var tl = timeline as TimeLineMastodon;
-                tl.AddOnUpdate((_, e) =>
+                tl.SetOnUpdate((_, e) =>
                 {
                     tl.AddStatus(new TwitdonMastodonStatus(e.Status));
                 });
+                tl.Start();
+            }
+            else if (timeline is TimeLineTwitter)
+            {
+                var tl = timeline as TimeLineTwitter;
+                tl.OnGetStatusMessage.Subscribe(x => tl.AddStatus(new TwitdonTwitterStatus(x.Status)));
                 tl.Start();
             }
 
@@ -55,7 +62,6 @@ namespace Twitdon
             timer.Interval = 1000;
             timer.AutoReset = true;
             timer.Enabled = true;
-
         }
 
         #endregion

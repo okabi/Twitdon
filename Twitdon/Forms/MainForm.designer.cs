@@ -98,7 +98,7 @@
             // 登録RToolStripMenuItem
             // 
             this.登録RToolStripMenuItem.Name = "登録RToolStripMenuItem";
-            this.登録RToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.登録RToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.登録RToolStripMenuItem.Text = "登録(&R)";
             this.登録RToolStripMenuItem.Click += new System.EventHandler(this.登録RToolStripMenuItem_Click);
             // 
@@ -107,7 +107,7 @@
             this.削除DToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.userpawoonetToolStripMenuItem});
             this.削除DToolStripMenuItem.Name = "削除DToolStripMenuItem";
-            this.削除DToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.削除DToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.削除DToolStripMenuItem.Text = "削除(&D)";
             // 
             // userpawoonetToolStripMenuItem
@@ -121,7 +121,6 @@
             this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel.ColumnCount = 1;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 68);

@@ -49,6 +49,10 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CoreTweet, Version=0.8.0.384, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoreTweet.0.8.0.384\lib\net45\CoreTweet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -112,6 +116,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
@@ -152,6 +168,10 @@
     <Compile Include="Define.cs" />
     <Compile Include="Interfaces\ITimeLine.cs" />
     <Compile Include="Models\TimeLineMastodon.cs" />
+    <Compile Include="Models\TimeLineTwitter.cs" />
+    <Compile Include="Models\TwitdonTwitterClient.cs" />
+    <Compile Include="Models\TwitdonTwitterStatus.cs" />
+    <Compile Include="SecretDefine.cs" />
     <Compile Include="UserControls\ScrollablePanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -243,7 +263,6 @@
     <Content Include="Assets\reply.png" />
     <Content Include="Assets\star-after.png" />
     <Content Include="Assets\star-before.png" />
-    <Content Include="Log4net.Config.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
