@@ -29,7 +29,7 @@ namespace Twitdon.Interfaces
         /// <param name="status">ツイート/トゥートする内容。</param>
         /// <returns>ツイート/トゥート内容。</returns>
         Task<IStatus> PostStatus(string status);
-
+        /*
         /// <summary>
         /// ツイート/トゥートをお気に入り登録します。
         /// </summary>
@@ -43,7 +43,7 @@ namespace Twitdon.Interfaces
         /// <param name="statusId">お気に入り解除するツイート/トゥートのID。</param>
         /// <returns>ツイート/トゥート内容。</returns>
         Task<IStatus> Unfavourite(int statusId);
-
+        */
         #endregion
     }
 }

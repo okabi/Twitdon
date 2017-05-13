@@ -1,8 +1,10 @@
-﻿using log4net;
-using Mastonet;
+﻿using CoreTweet.Streaming;
+using log4net;
 using System;
-using System.Drawing;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
@@ -10,9 +12,9 @@ using Twitdon.Interfaces;
 namespace Twitdon.Models
 {
     /// <summary>
-    /// Mastodon タイムラインを表すクラスです。
+    /// Twitter タイムラインを表すクラスです。
     /// </summary>
-    class TimeLineMastodon : ITimeLine
+    class TimeLineTwitter : ITimeLine
     {
         #region フィールド
 
@@ -24,7 +26,7 @@ namespace Twitdon.Models
         /// <summary>
         /// クライアントの本体。
         /// </summary>
-        private TwitdonMastodonClient client;
+        private TwitdonTwitterClient client;
 
         /// <summary>
         /// ステータスのコントロールリストの本体。
@@ -32,14 +34,19 @@ namespace Twitdon.Models
         private List<TimeLineStatus> statuses;
 
         /// <summary>
-        /// タイムラインストリーミング。
+        /// ホームタイムラインのストリーミング。
         /// </summary>
-        private readonly TimelineStreaming streaming;
+        private IConnectableObservable<StreamingMessage> streaming;
+
+        /// <summary>
+        /// 開始されたストリーミング。
+        /// </summary>
+        private IDisposable disposable;
 
         /// <summary>
         /// タイムライン追加待ちのステータス。
         /// </summary>
-        private Queue<TwitdonMastodonStatus> fetchedStatuses;
+        private Queue<TwitdonTwitterStatus> fetchedStatuses;
 
         #endregion
 
@@ -79,6 +86,11 @@ namespace Twitdon.Models
         /// </summary>
         public string TimeLineName { get; private set; }
 
+        /// <summary>
+        /// Subscribe メソッドで、ストリーミングで StatusMessage を得た時の動作を設定します。
+        /// </summary>
+        public IObservable<StatusMessage> OnGetStatusMessage { get; private set; }
+
         #endregion
 
         #region コンストラクタ
@@ -86,16 +98,16 @@ namespace Twitdon.Models
         /// <summary>
         /// コンストラクタです。
         /// </summary>
-        /// <param name="client">Mastodon クライアント。</param>
-        /// <param name="streaming">イベントの設定されたストリーミング。</param>
+        /// <param name="client">Twitter クライアント。</param>
         /// <param name="name">タイムライン名。</param>
-        public TimeLineMastodon(TwitdonMastodonClient client, TimelineStreaming streaming, string name)
+        public TimeLineTwitter(TwitdonTwitterClient client, string name)
         {
             this.client = client;
-            this.streaming = streaming;
             TimeLineName = $"{name}{client.AccountName}";
+            streaming = client.Streaming;
+            OnGetStatusMessage = streaming.OfType<StatusMessage>();
             statuses = new List<TimeLineStatus>(Define.StatusesCapacity);
-            fetchedStatuses = new Queue<TwitdonMastodonStatus>();
+            fetchedStatuses = new Queue<TwitdonTwitterStatus>();
         }
 
         #endregion
@@ -110,7 +122,7 @@ namespace Twitdon.Models
         /// <param name="status">追加するステータス。</param>
         public void AddStatus(IStatus status)
         {
-            fetchedStatuses.Enqueue(status as TwitdonMastodonStatus);
+            fetchedStatuses.Enqueue(status as TwitdonTwitterStatus);
         }
 
         /// <summary>
@@ -162,7 +174,7 @@ namespace Twitdon.Models
         {
             try
             {
-                streaming.Start();
+                disposable = streaming.Connect();
             }
             catch (Exception e)
             {
@@ -176,34 +188,8 @@ namespace Twitdon.Models
         /// </summary>
         public void Stop()
         {
-            streaming.Stop();
-        }
-
-        /// <summary>
-        /// ストリーミングで新しいステータスを得た時の動作を設定します。
-        /// </summary>
-        /// <param name="function">設定する動作。</param>
-        public void SetOnUpdate(EventHandler<StreamUpdateEventArgs> function)
-        {
-            streaming.OnUpdate += function;
-        }
-
-        /// <summary>
-        /// ストリーミングで新しい通知を得た時の動作を設定します。
-        /// </summary>
-        /// <param name="function">設定する動作。</param>
-        public void SetOnNotification(EventHandler<StreamNotificationEventArgs> function)
-        {
-            streaming.OnNotification += function;
-        }
-
-        /// <summary>
-        /// ストリーミングで新しい削除通知を得た時の動作を設定します。
-        /// </summary>
-        /// <param name="function">設定する動作。</param>
-        public void SetOnDelete(EventHandler<StreamDeleteEventArgs> function)
-        {
-            streaming.OnDelete += function;
+            disposable?.Dispose();
+            disposable = null;
         }
 
         #endregion

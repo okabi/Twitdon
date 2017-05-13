@@ -1,5 +1,4 @@
 ﻿using log4net;
-using Mastonet;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System;
@@ -28,9 +27,9 @@ namespace Twitdon
         private List<TimeLineFrame> timelines;
 
         /// <summary>
-        /// Mastodon クライアントのリストです。
+        /// クライアントのリストです。
         /// </summary>
-        private List<TwitdonMastodonClient> mastodonClients;
+        private List<IClient> clients;
 
         /// <summary>
         /// ユーザがテキストボックスに何も入力していない場合 true になります。
@@ -56,12 +55,11 @@ namespace Twitdon
         private void Initialize()
         {
             timelines = new List<TimeLineFrame>();
-            if (Settings.Default.MastodonDomains == null)
-            {
-                Settings.Default.MastodonDomains = new StringCollection();
-                Settings.Default.MastodonEMails = new StringCollection();
-                Settings.Default.MastodonPasswords = new StringCollection();
-            }
+            Settings.Default.MastodonDomains = Settings.Default.MastodonDomains ?? new StringCollection();
+            Settings.Default.MastodonEMails = Settings.Default.MastodonEMails ?? new StringCollection();
+            Settings.Default.MastodonPasswords = Settings.Default.MastodonPasswords ?? new StringCollection();
+            Settings.Default.TwitterAccessTokens = Settings.Default.TwitterAccessTokens ?? new StringCollection();
+            Settings.Default.TwitterAccessTokenSecrets = Settings.Default.TwitterAccessTokenSecrets ?? new StringCollection();
             ActiveControl = buttonPost;
         }
 
@@ -70,7 +68,7 @@ namespace Twitdon
         /// </summary>
         private async Task CreateAllClients()
         {
-            mastodonClients = new List<TwitdonMastodonClient>();
+            clients = new List<IClient>();
             for (int i = 0; i < Settings.Default.MastodonDomains.Count; i++)
             {
                 var client = new TwitdonMastodonClient(Settings.Default.MastodonDomains[i], Settings.Default.MastodonEMails[i], Settings.Default.MastodonPasswords[i]);
@@ -78,7 +76,17 @@ namespace Twitdon
                 // TODO: アカウントに接続できなかった時の個別処理
                 if ((await client.CreateClient(false)) != null)
                 {
-                    mastodonClients.Add(client);
+                    clients.Add(client);
+                }
+            }
+            for (int i = 0; i < Settings.Default.TwitterAccessTokens.Count; i++)
+            {
+                var client = new TwitdonTwitterClient(i);
+                // TODO: どのアカウントにも接続できなかった時の処理(インターネット接続など)
+                // TODO: アカウントに接続できなかった時の個別処理
+                if ((await client.CreateClient(false)) != null)
+                {
+                    clients.Add(client);
                 }
             }
         }
@@ -106,18 +114,6 @@ namespace Twitdon
             tlf.Size = Size;
             tlf.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
             tableLayoutPanel.Controls.Add(tlf, timelines.Count - 1, 0);
-            //Controls.Add(tlf);
-        }
-
-        /// <summary>
-        /// 指定した Mastodon タイムラインをコントロールに追加します。
-        /// </summary>
-        /// <param name="client">Mastodon クライアント。</param>
-        /// <param name="streaming">ストリーミング。</param>
-        /// <param name="name">タイムライン名。</param>
-        private void AddTimeLineMastodon(TwitdonMastodonClient client, TimelineStreaming streaming, string name)
-        {
-            AddTimeLine(new TimeLineMastodon(client, streaming, name));
         }
 
         /// <summary>
@@ -133,7 +129,7 @@ namespace Twitdon
             {
                 // テスト用
                 ActiveControl = buttonPost;
-                await mastodonClients[0].PostStatus(textBoxPost.Text);
+                await clients[0].PostStatus(textBoxPost.Text);
                 textboxBlank = true;
                 textBoxPost.Text = "今なにしてる？";
                 textBoxPost.BackColor = Color.Silver;
@@ -155,7 +151,7 @@ namespace Twitdon
             Initialize();
 
             // アカウント未登録時は登録フォームを表示する
-            if (Settings.Default.MastodonDomains.Count == 0)
+            if (Settings.Default.MastodonDomains.Count == 0 && Settings.Default.TwitterAccessTokens.Count == 0)
             {
                 using (var f = new RegisterForm())
                 {
@@ -164,7 +160,7 @@ namespace Twitdon
             }
 
             // 登録されたアカウントが無ければ終了
-            if (Settings.Default.MastodonDomains.Count == 0)
+            if (Settings.Default.MastodonDomains.Count == 0 && Settings.Default.TwitterAccessTokens.Count == 0)
             {
                 Application.Exit();
                 return;
@@ -175,14 +171,23 @@ namespace Twitdon
                 // 全クライアントを作成
                 await CreateAllClients();
 
-                // (テスト用)ホーム・Public タイムラインを追加。
-                foreach (var client in mastodonClients)
+                foreach (var client in clients)
                 {
                     // (テスト用)ユーザーのアイコン画像を取得する
                     textboxBlank = true;
                     pictureBoxUser.ImageLocation = client.Icon;
-                    AddTimeLineMastodon(client, client.UserStreaming, "");
-                    AddTimeLineMastodon(client, client.PublicStreaming, "Public  ");
+                    if (client is TwitdonMastodonClient)
+                    {
+                        // (テスト用)ホーム・Public タイムラインを追加。
+                        var c = client as TwitdonMastodonClient;
+                        AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, ""));
+                        AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, "Public  "));
+                    }
+                    else if(client is TwitdonTwitterClient)
+                    {
+                        var c = client as TwitdonTwitterClient;
+                        AddTimeLine(new TimeLineTwitter(c, ""));
+                    }
                 }
             }
             catch (Exception ex)
@@ -208,7 +213,7 @@ namespace Twitdon
             // クライアントを作成
             if (client != null)
             {
-                mastodonClients.Add(client as TwitdonMastodonClient);
+                clients.Add(client);
             }
         }
 

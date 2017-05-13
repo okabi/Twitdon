@@ -70,12 +70,23 @@ namespace Twitdon.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection Timelines {
+        public global::System.Collections.Specialized.StringCollection TwitterAccessTokens {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Timelines"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["TwitterAccessTokens"]));
             }
             set {
-                this["Timelines"] = value;
+                this["TwitterAccessTokens"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection TwitterAccessTokenSecrets {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["TwitterAccessTokenSecrets"]));
+            }
+            set {
+                this["TwitterAccessTokenSecrets"] = value;
             }
         }
     }

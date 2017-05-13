@@ -1,7 +1,6 @@
 ﻿using log4net;
 using System;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
@@ -183,14 +182,20 @@ namespace Twitdon
         /// </summary>
         private async Task RegisterTwitter()
         {
+            // TODO: 既に登録されている内容か確認する
+
             // アカウントに接続
             var client = new TwitdonTwitterClient(TwitterEMail, TwitterPassword);
-            var result = await client.CreateClient(true);
+            var result = await client.CreateClient(true, this, progressBar);
             if (result == null)
             {
                 return;
             }
-            Invoke((MethodInvoker)(() => progressBar.Value = 100));
+
+            // アカウント情報を保存
+            Settings.Default.TwitterAccessTokens.Add(result.AccessToken);
+            Settings.Default.TwitterAccessTokenSecrets.Add(result.AccessTokenSecret);
+            Client = client;
         }
 
         /// <summary>
@@ -205,23 +210,20 @@ namespace Twitdon
                 Utilities.ShowError($"既に登録されているアカウントです。");
                 return;
             }
-            Invoke((MethodInvoker)(() => progressBar.Value = 10));
 
             // アカウントに接続
             var client = new TwitdonMastodonClient(MastodonDomain, MastodonEMail, MastodonPassword);
-            var result = await client.CreateClient(true);
+            var result = await client.CreateClient(true, this, progressBar);
             if (result == null)
             {
                 return;
             }
-            Invoke((MethodInvoker)(() => progressBar.Value = 90));
 
-            // アカウント情報を保存して終了
+            // アカウント情報を保存
             Settings.Default.MastodonDomains.Add(MastodonDomain);
             Settings.Default.MastodonEMails.Add(MastodonEMail);
             Settings.Default.MastodonPasswords.Add(MastodonPassword);
             Client = client;
-            Invoke((MethodInvoker)(() => progressBar.Value = 100));
         }
 
         #endregion

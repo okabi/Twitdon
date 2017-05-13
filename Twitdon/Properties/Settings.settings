@@ -14,7 +14,10 @@
     <Setting Name="MastodonPasswords" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Timelines" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="TwitterAccessTokens" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TwitterAccessTokenSecrets" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

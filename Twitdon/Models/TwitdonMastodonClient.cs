@@ -4,6 +4,7 @@ using Mastonet.Entities;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Twitdon.Interfaces;
 
 namespace Twitdon.Models
@@ -95,8 +96,10 @@ namespace Twitdon.Models
         /// 登録された情報でクライアントを作成して返します。エラー発生時は null を返します。
         /// </summary>
         /// <param name="showError">エラー発生時にメッセージボックスを出力するか。</param>
+        /// <param name="control">プログレスバーの存在するコントロール。</param>
+        /// <param name="progressBar">進捗状況を表示するプログレスバー。</param>
         /// <returns>作成したクライアント。エラー発生時は null を返します。</returns>
-        public async Task<MastodonClient> CreateClient(bool showError)
+        public async Task<MastodonClient> CreateClient(bool showError, Control control = null, ProgressBar progressBar = null)
         {
             // Mastodon Instance へのアプリケーションの登録
             AuthenticationClient authClient;
@@ -115,6 +118,7 @@ namespace Twitdon.Models
                 }
                 return null;
             }
+            control?.Invoke((MethodInvoker)(() => progressBar.Value = 33));
 
             // アクセストークンの取得
             Auth auth;
@@ -131,12 +135,14 @@ namespace Twitdon.Models
                 }
                 return null;
             }
+            control?.Invoke((MethodInvoker)(() => progressBar.Value = 66));
 
             // クライアントを作成
             client = new MastodonClient(appRegistration, auth);
             var user = await client.GetCurrentUser();
             AccountName = $"{user.UserName}@{instance}";
             Icon = user.AvatarUrl;
+            control?.Invoke((MethodInvoker)(() => progressBar.Value = 100));
             return client;
         }
 
