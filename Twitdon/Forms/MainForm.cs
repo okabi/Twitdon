@@ -149,6 +149,12 @@ namespace Twitdon
         /// <param name="timeline">追加するタイムライン。</param>
         private async Task AddTimeLine(ITimeLine timeline)
         {
+            // 既に存在するタイムラインなら終了
+            if (timelines.Find(x => x.TimeLineName == timeline.TimeLineName) != null)
+            {
+                return;
+            }
+
             Utilities.BeginUpdate(this);
             // 枠の大きさを調整
             if (timelines.Count > 0)
