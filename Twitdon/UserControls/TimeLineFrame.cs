@@ -1,4 +1,4 @@
-﻿using CoreTweet.Streaming;
+﻿using log4net;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -16,9 +16,26 @@ namespace Twitdon
         #region フィールド
 
         /// <summary>
+        /// ロガーオブジェクト。
+        /// </summary>
+        private readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// タイムラインの本体です。
         /// </summary>
         private readonly ITimeLine timeline;
+
+        #endregion
+
+        #region プロパティ
+
+        /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        public string AccountName
+        {
+            get { return timeline.AccountName; }
+        }
 
         #endregion
 
@@ -31,7 +48,6 @@ namespace Twitdon
         public TimeLineFrame(ITimeLine timeline)
         {
             InitializeComponent();
-            SetStyle(ControlStyles.Opaque, true);
             panel.MouseWheel += Panel_MouseWheel;
 
             // タイムラインにこの枠を紐付ける
@@ -62,6 +78,18 @@ namespace Twitdon
             timer.Interval = 1000;
             timer.AutoReset = true;
             timer.Enabled = true;
+        }
+
+        #endregion
+
+        #region public メソッド
+
+        /// <summary>
+        /// ストリーミングを停止します。
+        /// </summary>
+        public void StopStreaming()
+        {
+            timeline.Stop();
         }
 
         #endregion

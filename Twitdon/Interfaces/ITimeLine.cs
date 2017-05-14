@@ -31,6 +31,11 @@ namespace Twitdon.Interfaces
         /// </summary>
         string TimeLineName { get; }
 
+        /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        string AccountName { get; }
+
         #endregion
 
         #region public メソッド

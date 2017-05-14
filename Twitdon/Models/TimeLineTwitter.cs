@@ -82,6 +82,14 @@ namespace Twitdon.Models
         }
 
         /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        public string AccountName
+        {
+            get { return client.AccountName; }
+        }
+
+        /// <summary>
         /// タイムライン枠に表示するタイムライン名です。
         /// </summary>
         public string TimeLineName { get; private set; }

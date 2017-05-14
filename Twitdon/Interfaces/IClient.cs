@@ -19,6 +19,11 @@ namespace Twitdon.Interfaces
         /// </summary>
         string Icon { get; }
 
+        /// <summary>
+        /// Settings.Default.xxxx のインデックス。
+        /// </summary>
+        int Index { get; set; }
+
         #endregion
 
         #region public メソッド

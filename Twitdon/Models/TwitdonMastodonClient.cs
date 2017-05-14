@@ -56,6 +56,11 @@ namespace Twitdon.Models
         public string Icon { get; private set; }
 
         /// <summary>
+        /// Settings.Default.xxxx のインデックス。
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
         /// ユーザーストリーミング。
         /// </summary>
         public TimelineStreaming UserStreaming
@@ -81,11 +86,13 @@ namespace Twitdon.Models
         /// <param name="instance">インスタンスのドメイン。</param>
         /// <param name="email">ユーザのメールアドレス。</param>
         /// <param name="password">ユーザのパスワード。</param>
-        public TwitdonMastodonClient(string instance, string email, string password)
+        /// <param name="index">Settings.Default.xxxx のインデックス。</param>
+        public TwitdonMastodonClient(string instance, string email, string password, int index)
         {
             this.instance = instance;
             this.email = email;
             this.password = password;
+            Index = index;
         }
 
         #endregion
