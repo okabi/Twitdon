@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
 
@@ -41,6 +42,11 @@ namespace Twitdon.Models
         /// </summary>
         private Queue<TwitdonMastodonStatus> fetchedStatuses;
 
+        /// <summary>
+        /// タイムラインの種類。
+        /// </summary>
+        private Define.MastodonTimeLineType type;
+
         #endregion
 
         #region プロパティ
@@ -75,6 +81,14 @@ namespace Twitdon.Models
         }
 
         /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        public string AccountName
+        {
+            get { return client.AccountName; }
+        }
+
+        /// <summary>
         /// タイムライン枠に表示するタイムライン名です。
         /// </summary>
         public string TimeLineName { get; private set; }
@@ -87,12 +101,13 @@ namespace Twitdon.Models
         /// コンストラクタです。
         /// </summary>
         /// <param name="client">Mastodon クライアント。</param>
-        /// <param name="streaming">イベントの設定されたストリーミング。</param>
-        /// <param name="name">タイムライン名。</param>
-        public TimeLineMastodon(TwitdonMastodonClient client, TimelineStreaming streaming, string name)
+        /// <param name="type">タイムラインの種類。</param>
+        public TimeLineMastodon(TwitdonMastodonClient client, Define.MastodonTimeLineType type)
         {
             this.client = client;
-            this.streaming = streaming;
+            streaming = type == Define.MastodonTimeLineType.Home ? client.UserStreaming : client.PublicStreaming;
+            this.type = type;
+            var name = $"{Utilities.MastodonTimeLineTypeToString(type)}  ";
             TimeLineName = $"{name}{client.AccountName}";
             statuses = new List<TimeLineStatus>(Define.StatusesCapacity);
             fetchedStatuses = new Queue<TwitdonMastodonStatus>();
@@ -101,6 +116,19 @@ namespace Twitdon.Models
         #endregion
 
         #region public メソッド
+
+        /// <summary>
+        /// 最新のタイムラインで初期化します。
+        /// </summary>
+        public async Task Initialize()
+        {
+            var response = type == Define.MastodonTimeLineType.Home ? 
+                await client.GetHomeTimeline(limit: 50) : await client.GetPublicTimeline(limit: 50);
+            foreach (var r in response)
+            {
+                AddStatus(r);
+            }
+        }
 
         /// <summary>
         /// タイムラインにステータスコントロールを追加します。
@@ -138,7 +166,7 @@ namespace Twitdon.Models
             int deleteNum = statuses.Count + fetchedStatuses.Count - Define.StatusesCapacity;
             for (int i = 0; i < deleteNum; i++)
             {
-                Panel.Controls.RemoveAt(0);
+                Panel.Controls[0].Dispose();
                 statuses.RemoveAt(0);
             }
 

@@ -30,17 +30,17 @@
         {
             this.labelUser = new System.Windows.Forms.Label();
             this.labelInfo = new System.Windows.Forms.Label();
+            this.labelContent = new System.Windows.Forms.LinkLabel();
+            this.pictureBoxIcon = new System.Windows.Forms.PictureBox();
             this.pictureDelete = new System.Windows.Forms.PictureBox();
             this.pictureFavorite = new System.Windows.Forms.PictureBox();
             this.pictureReblog = new System.Windows.Forms.PictureBox();
             this.pictureReply = new System.Windows.Forms.PictureBox();
-            this.pictureBoxIcon = new System.Windows.Forms.PictureBox();
-            this.labelContent = new System.Windows.Forms.LinkLabel();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureDelete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureFavorite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureReblog)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureReply)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // labelUser
@@ -67,6 +67,35 @@
             this.labelInfo.TabIndex = 3;
             this.labelInfo.Text = "1分前 via Web";
             this.labelInfo.Visible = false;
+            // 
+            // labelContent
+            // 
+            this.labelContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelContent.AutoEllipsis = true;
+            this.labelContent.AutoSize = true;
+            this.labelContent.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.labelContent.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelContent.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.labelContent.Location = new System.Drawing.Point(57, 23);
+            this.labelContent.MaximumSize = new System.Drawing.Size(352, 0);
+            this.labelContent.Name = "labelContent";
+            this.labelContent.Size = new System.Drawing.Size(347, 40);
+            this.labelContent.TabIndex = 9;
+            this.labelContent.Text = "あああああああああああああああああああああああああああああああああああああ";
+            this.labelContent.UseMnemonic = false;
+            this.labelContent.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelContent_LinkClicked);
+            // 
+            // pictureBoxIcon
+            // 
+            this.pictureBoxIcon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxIcon.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxIcon.Name = "pictureBoxIcon";
+            this.pictureBoxIcon.Size = new System.Drawing.Size(48, 48);
+            this.pictureBoxIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxIcon.TabIndex = 8;
+            this.pictureBoxIcon.TabStop = false;
+            this.pictureBoxIcon.Click += new System.EventHandler(this.pictureBoxIcon_Click);
             // 
             // pictureDelete
             // 
@@ -116,34 +145,6 @@
             this.pictureReply.TabStop = false;
             this.pictureReply.Visible = false;
             // 
-            // pictureBoxIcon
-            // 
-            this.pictureBoxIcon.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxIcon.Location = new System.Drawing.Point(3, 3);
-            this.pictureBoxIcon.Name = "pictureBoxIcon";
-            this.pictureBoxIcon.Size = new System.Drawing.Size(48, 48);
-            this.pictureBoxIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBoxIcon.TabIndex = 8;
-            this.pictureBoxIcon.TabStop = false;
-            this.pictureBoxIcon.Click += new System.EventHandler(this.pictureBoxIcon_Click);
-            // 
-            // labelContent
-            // 
-            this.labelContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelContent.AutoEllipsis = true;
-            this.labelContent.AutoSize = true;
-            this.labelContent.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.labelContent.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-            this.labelContent.Location = new System.Drawing.Point(57, 23);
-            this.labelContent.MaximumSize = new System.Drawing.Size(352, 0);
-            this.labelContent.Name = "labelContent";
-            this.labelContent.Size = new System.Drawing.Size(347, 40);
-            this.labelContent.TabIndex = 9;
-            this.labelContent.Text = "あああああああああああああああああああああああああああああああああああああ";
-            this.labelContent.UseMnemonic = false;
-            this.labelContent.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelContent_LinkClicked);
-            // 
             // TimeLineStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -159,11 +160,11 @@
             this.Controls.Add(this.labelUser);
             this.Name = "TimeLineStatus";
             this.Size = new System.Drawing.Size(414, 129);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureDelete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureFavorite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureReblog)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureReply)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

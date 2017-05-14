@@ -2,6 +2,8 @@
 using CoreTweet.Streaming;
 using log4net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
@@ -36,11 +38,6 @@ namespace Twitdon.Models
         private readonly string password;
 
         /// <summary>
-        /// トークンが保存されているインデックス。
-        /// </summary>
-        private int tokenIndex;
-
-        /// <summary>
         /// PINコード。
         /// </summary>
         private string pin;
@@ -65,6 +62,11 @@ namespace Twitdon.Models
         public string Icon { get; private set; }
 
         /// <summary>
+        /// Settings.Default.xxxx のインデックス。
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
         /// ホームタイムラインのストリーミング。
         /// </summary>
         public IConnectableObservable<StreamingMessage> Streaming;
@@ -82,16 +84,16 @@ namespace Twitdon.Models
         {
             this.screenNameOrEMail = screenNameOrEMail;
             this.password = password;
-            tokenIndex = -1;
+            Index = -1;
         }
 
         /// <summary>
         /// Twitter のクライアント情報を登録します。この後 CreateClient を呼んでください。
         /// </summary>
-        /// <param name="tokenIndex">取得済みのトークンが保存されているインデックス。</param>
-        public TwitdonTwitterClient(int tokenIndex)
+        /// <param name="index">取得済みのトークンが保存されているインデックス。</param>
+        public TwitdonTwitterClient(int index)
         {
-            this.tokenIndex = tokenIndex;
+            Index = index;
         }
 
         #endregion
@@ -108,10 +110,10 @@ namespace Twitdon.Models
         public async Task<Tokens> CreateClient(bool showError, Control control = null, ProgressBar progressBar = null)
         {
             // トークンが保存されている場合はそれを使ってクライアント作成する
-            if (tokenIndex >= 0)
+            if (Index >= 0)
             {
                 client = Tokens.Create(SecretDefine.TwitterConsumerKey, SecretDefine.TwitterConsumerSecret,
-                    Settings.Default.TwitterAccessTokens[tokenIndex], Settings.Default.TwitterAccessTokenSecrets[tokenIndex]);
+                    Settings.Default.TwitterAccessTokens[Index], Settings.Default.TwitterAccessTokenSecrets[Index]);
                 var response = await client.Account.VerifyCredentialsAsync();
                 client.UserId = (long)response.Id;
                 client.ScreenName = response.ScreenName;
@@ -199,6 +201,19 @@ namespace Twitdon.Models
             control?.Invoke((MethodInvoker)(() => progressBar.Value = 100));
 
             return client;
+        }
+
+        /// <summary>
+        /// ホームタイムラインを取得します。
+        /// </summary>
+        /// <param name="maxId">取得するステータスの最大ID。</param>
+        /// <param name="sinceId">取得するステータスの最小ID。</param>
+        /// <param name="limit">取得するステータスの件数</param>
+        /// <returns>取得したホームタイムライン。</returns>
+        public async Task<List<TwitdonTwitterStatus>> GetHomeTimeline(int? maxId = null, int? sinceId = null, int? limit = null)
+        {
+            var response = await client.Statuses.HomeTimelineAsync(count: limit, since_id: sinceId, max_id: maxId);
+            return response.Select(x => new TwitdonTwitterStatus(x)).ToList();
         }
 
         /// <summary>

@@ -193,6 +193,7 @@ namespace Twitdon
             }
 
             // アカウント情報を保存
+            client.Index = Settings.Default.TwitterAccessTokens.Count;
             Settings.Default.TwitterAccessTokens.Add(result.AccessToken);
             Settings.Default.TwitterAccessTokenSecrets.Add(result.AccessTokenSecret);
             Client = client;
@@ -212,7 +213,7 @@ namespace Twitdon
             }
 
             // アカウントに接続
-            var client = new TwitdonMastodonClient(MastodonDomain, MastodonEMail, MastodonPassword);
+            var client = new TwitdonMastodonClient(MastodonDomain, MastodonEMail, MastodonPassword, Settings.Default.MastodonDomains.Count);
             var result = await client.CreateClient(true, this, progressBar);
             if (result == null)
             {

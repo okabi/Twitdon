@@ -255,6 +255,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\close.png" />
     <Content Include="Assets\delete.png" />
     <Content Include="Assets\heart-after.png" />
     <Content Include="Assets\heart-before.png" />

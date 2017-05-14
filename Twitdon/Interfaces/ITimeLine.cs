@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Twitdon.Interfaces
 {
@@ -31,9 +32,19 @@ namespace Twitdon.Interfaces
         /// </summary>
         string TimeLineName { get; }
 
+        /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        string AccountName { get; }
+
         #endregion
 
         #region public メソッド
+
+        /// <summary>
+        /// 最新のタイムラインで初期化します。
+        /// </summary>
+        Task Initialize();
 
         /// <summary>
         /// タイムラインにステータスコントロールを追加します。

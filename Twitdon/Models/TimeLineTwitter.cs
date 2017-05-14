@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
 
@@ -48,6 +49,11 @@ namespace Twitdon.Models
         /// </summary>
         private Queue<TwitdonTwitterStatus> fetchedStatuses;
 
+        /// <summary>
+        /// タイムラインの種類。
+        /// </summary>
+        private Define.TwitterTimeLineType type;
+
         #endregion
 
         #region プロパティ
@@ -82,6 +88,14 @@ namespace Twitdon.Models
         }
 
         /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        public string AccountName
+        {
+            get { return client.AccountName; }
+        }
+
+        /// <summary>
         /// タイムライン枠に表示するタイムライン名です。
         /// </summary>
         public string TimeLineName { get; private set; }
@@ -99,10 +113,12 @@ namespace Twitdon.Models
         /// コンストラクタです。
         /// </summary>
         /// <param name="client">Twitter クライアント。</param>
-        /// <param name="name">タイムライン名。</param>
-        public TimeLineTwitter(TwitdonTwitterClient client, string name)
+        /// <param name="type">タイムラインの種類。</param>
+        public TimeLineTwitter(TwitdonTwitterClient client, Define.TwitterTimeLineType type)
         {
             this.client = client;
+            this.type = type;
+            var name = $"{Utilities.TwitterTimeLineTypeToString(type)}  ";
             TimeLineName = $"{name}{client.AccountName}";
             streaming = client.Streaming;
             OnGetStatusMessage = streaming.OfType<StatusMessage>();
@@ -113,6 +129,19 @@ namespace Twitdon.Models
         #endregion
 
         #region public メソッド
+
+        /// <summary>
+        /// 最新のタイムラインで初期化します。
+        /// </summary>
+        public async Task Initialize()
+        {
+            var response = type == Define.TwitterTimeLineType.Home ?
+                await client.GetHomeTimeline(limit: 50) : new List<TwitdonTwitterStatus>();
+            foreach (var r in response)
+            {
+                AddStatus(r);
+            }
+        }
 
         /// <summary>
         /// タイムラインにステータスコントロールを追加します。

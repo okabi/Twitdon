@@ -1,6 +1,7 @@
-﻿using CoreTweet.Streaming;
+﻿using log4net;
 using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
 using Twitdon.Models;
@@ -16,9 +17,39 @@ namespace Twitdon
         #region フィールド
 
         /// <summary>
+        /// ロガーオブジェクト。
+        /// </summary>
+        private readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// タイムラインの本体です。
         /// </summary>
         private readonly ITimeLine timeline;
+
+        /// <summary>
+        /// タイムラインが描画されている親フォーム。
+        /// </summary>
+        private readonly MainForm owner;
+
+        #endregion
+
+        #region プロパティ
+
+        /// <summary>
+        /// タイムラインに紐付けられている user@pawoo.net のようなアカウント名です。
+        /// </summary>
+        public string AccountName
+        {
+            get { return timeline.AccountName; }
+        }
+
+        /// <summary>
+        /// Public user@pawoo.net のような一意のタイムライン名です。
+        /// </summary>
+        public string TimeLineName
+        {
+            get { return labelTimeLineName.Text; }
+        }
 
         #endregion
 
@@ -27,11 +58,12 @@ namespace Twitdon
         /// <summary>
         /// コンストラクタです。
         /// </summary>
+        /// <param name="owner">タイムラインが描画されている親フォーム。</param>
         /// <param name="timeline">このインスタンスに紐付けるタイムライン。</param>
-        public TimeLineFrame(ITimeLine timeline)
+        public TimeLineFrame(MainForm owner, ITimeLine timeline)
         {
             InitializeComponent();
-            SetStyle(ControlStyles.Opaque, true);
+            this.owner = owner;
             panel.MouseWheel += Panel_MouseWheel;
 
             // タイムラインにこの枠を紐付ける
@@ -47,13 +79,11 @@ namespace Twitdon
                 {
                     tl.AddStatus(new TwitdonMastodonStatus(e.Status));
                 });
-                tl.Start();
             }
             else if (timeline is TimeLineTwitter)
             {
                 var tl = timeline as TimeLineTwitter;
                 tl.OnGetStatusMessage.Subscribe(x => tl.AddStatus(new TwitdonTwitterStatus(x.Status)));
-                tl.Start();
             }
 
             // タイマーイベントの追加
@@ -62,6 +92,27 @@ namespace Twitdon
             timer.Interval = 1000;
             timer.AutoReset = true;
             timer.Enabled = true;
+        }
+
+        #endregion
+
+        #region public メソッド
+
+        /// <summary>
+        /// ストリーミングを開始します。
+        /// </summary>
+        public async Task StartStreaming()
+        {
+            await timeline.Initialize();
+            timeline.Start();
+        }
+
+        /// <summary>
+        /// ストリーミングを停止します。
+        /// </summary>
+        public void StopStreaming()
+        {
+            timeline.Stop();
         }
 
         #endregion
@@ -115,7 +166,11 @@ namespace Twitdon
             UpdateUI();
         }
 
-        #endregion
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            owner.RemoveTimeLine(timeline.TimeLineName);
+        }
 
+        #endregion
     }
 }
