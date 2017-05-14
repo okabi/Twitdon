@@ -2,6 +2,8 @@
 using Mastonet;
 using Mastonet.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -151,6 +153,32 @@ namespace Twitdon.Models
             Icon = user.AvatarUrl;
             control?.Invoke((MethodInvoker)(() => progressBar.Value = 100));
             return client;
+        }
+
+        /// <summary>
+        /// ホームタイムラインを取得します。
+        /// </summary>
+        /// <param name="maxId">取得するステータスの最大ID。</param>
+        /// <param name="sinceId">取得するステータスの最小ID。</param>
+        /// <param name="limit">取得するステータスの件数</param>
+        /// <returns>取得したホームタイムライン。</returns>
+        public async Task<List<TwitdonMastodonStatus>> GetHomeTimeline(int? maxId = null, int? sinceId = null, int? limit = null)
+        {
+            var response = await client.GetHomeTimeline(maxId, sinceId, limit);
+            return response.Select(x => new TwitdonMastodonStatus(x)).ToList();
+        }
+
+        /// <summary>
+        /// 連合タイムラインを取得します。
+        /// </summary>
+        /// <param name="maxId">取得するステータスの最大ID。</param>
+        /// <param name="sinceId">取得するステータスの最小ID。</param>
+        /// <param name="limit">取得するステータスの件数</param>
+        /// <returns></returns>
+        public async Task<List<TwitdonMastodonStatus>> GetPublicTimeline(int? maxId = null, int? sinceId = null, int? limit = null)
+        {
+            var response = await client.GetPublicTimeline(maxId, sinceId, limit);
+            return response.Select(x => new TwitdonMastodonStatus(x)).ToList();
         }
 
         /// <summary>

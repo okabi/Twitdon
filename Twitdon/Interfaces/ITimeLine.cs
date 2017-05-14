@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Twitdon.Interfaces
 {
@@ -39,6 +40,11 @@ namespace Twitdon.Interfaces
         #endregion
 
         #region public メソッド
+
+        /// <summary>
+        /// 最新のタイムラインで初期化します。
+        /// </summary>
+        Task Initialize();
 
         /// <summary>
         /// タイムラインにステータスコントロールを追加します。

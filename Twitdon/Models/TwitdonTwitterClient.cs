@@ -2,6 +2,8 @@
 using CoreTweet.Streaming;
 using log4net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
@@ -199,6 +201,19 @@ namespace Twitdon.Models
             control?.Invoke((MethodInvoker)(() => progressBar.Value = 100));
 
             return client;
+        }
+
+        /// <summary>
+        /// ホームタイムラインを取得します。
+        /// </summary>
+        /// <param name="maxId">取得するステータスの最大ID。</param>
+        /// <param name="sinceId">取得するステータスの最小ID。</param>
+        /// <param name="limit">取得するステータスの件数</param>
+        /// <returns>取得したホームタイムライン。</returns>
+        public async Task<List<TwitdonTwitterStatus>> GetHomeTimeline(int? maxId = null, int? sinceId = null, int? limit = null)
+        {
+            var response = await client.Statuses.HomeTimelineAsync(count: limit, since_id: sinceId, max_id: maxId);
+            return response.Select(x => new TwitdonTwitterStatus(x)).ToList();
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Twitdon.Interfaces;
 using Twitdon.Models;
@@ -63,13 +64,11 @@ namespace Twitdon
                 {
                     tl.AddStatus(new TwitdonMastodonStatus(e.Status));
                 });
-                tl.Start();
             }
             else if (timeline is TimeLineTwitter)
             {
                 var tl = timeline as TimeLineTwitter;
                 tl.OnGetStatusMessage.Subscribe(x => tl.AddStatus(new TwitdonTwitterStatus(x.Status)));
-                tl.Start();
             }
 
             // タイマーイベントの追加
@@ -83,6 +82,15 @@ namespace Twitdon
         #endregion
 
         #region public メソッド
+
+        /// <summary>
+        /// ストリーミングを開始します。
+        /// </summary>
+        public async Task StartStreaming()
+        {
+            await timeline.Initialize();
+            timeline.Start();
+        }
 
         /// <summary>
         /// ストリーミングを停止します。

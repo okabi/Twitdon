@@ -113,6 +113,7 @@ namespace Twitdon
                 {
                     item.DropDownItems.Add(new ToolStripMenuItem("ホーム"));
                     item.DropDownItems.Add(new ToolStripMenuItem("通知"));
+                    item.DropDownItems.Add(new ToolStripMenuItem("連合"));
                 }
                 timelinesToolStripMenuItem.DropDownItems.Add(item);
                 deleteToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(client.AccountName, null, accountDelete_Click));
@@ -123,7 +124,7 @@ namespace Twitdon
         /// 指定したタイムラインをコントロールに追加します。
         /// </summary>
         /// <param name="timeline">追加するタイムライン。</param>
-        private void AddTimeLine(ITimeLine timeline)
+        private async Task AddTimeLine(ITimeLine timeline)
         {
             Utilities.BeginUpdate(this);
             // 枠の大きさを調整
@@ -139,6 +140,7 @@ namespace Twitdon
 
             // タイムラインの追加
             var tlf = new TimeLineFrame(timeline);
+            await tlf.StartStreaming();
             timelines.Add(tlf);
             tlf.Size = Size;
             tlf.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
@@ -157,7 +159,6 @@ namespace Twitdon
             for (int i = 0; i < indexList.Count; i++)
             {
                 timelines[indexList[i]].StopStreaming();
-                Controls.Remove(timelines[indexList[i]]);
                 timelines[indexList[i]].Dispose();
                 tableLayoutPanel.ColumnStyles.RemoveAt(indexList[i]);
                 timelines.RemoveAt(indexList[i]);
@@ -242,13 +243,13 @@ namespace Twitdon
                     {
                         // (テスト用)ホーム・Public タイムラインを追加。
                         var c = client as TwitdonMastodonClient;
-                        AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, ""));
-                        AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, "Public  "));
+                        await AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, Define.MastodonTimeLineType.Home));
+                        await AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, Define.MastodonTimeLineType.Public));
                     }
                     else if(client is TwitdonTwitterClient)
                     {
                         var c = client as TwitdonTwitterClient;
-                        AddTimeLine(new TimeLineTwitter(c, ""));
+                        await AddTimeLine(new TimeLineTwitter(c, Define.TwitterTimeLineType.Home));
                     }
                 }
             }
@@ -261,7 +262,7 @@ namespace Twitdon
             }
         }
 
-        private void 登録RToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void 登録RToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IClient client;
             using (var f = new RegisterForm())
@@ -281,14 +282,14 @@ namespace Twitdon
                     // (テスト用)ホーム・Public タイムラインを追加。
                     var c = client as TwitdonMastodonClient;
                     clients.Add(c);
-                    AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, ""));
-                    AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, "Public  "));
+                    await AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, Define.MastodonTimeLineType.Home));
+                    await AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, Define.MastodonTimeLineType.Public));
                 }
                 else if (client is TwitdonTwitterClient)
                 {
                     var c = client as TwitdonTwitterClient;
                     clients.Add(c);
-                    AddTimeLine(new TimeLineTwitter(c, ""));
+                    await AddTimeLine(new TimeLineTwitter(c, Define.TwitterTimeLineType.Home));
                 }
 
                 // (テスト用)ユーザーのアイコン画像を取得する
