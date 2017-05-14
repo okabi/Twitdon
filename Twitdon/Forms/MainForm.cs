@@ -48,6 +48,23 @@ namespace Twitdon
 
         #endregion
 
+        #region public メソッド
+
+        /// <summary>
+        /// 指定した名前のタイムラインを削除します。
+        /// </summary>
+        /// <param name="timelineName">削除するタイムライン名。</param>
+        public void RemoveTimeLine(string timelineName)
+        {
+            RemoveTimeLine(timelines
+                .Select((x, i) => new { Index = i, TimeLineName = x.TimeLineName })
+                .Where(x => x.TimeLineName == timelineName)
+                .Select(x => x.Index)
+                .ToList());
+        }
+
+        #endregion
+
         #region private メソッド
 
         /// <summary>
@@ -105,15 +122,21 @@ namespace Twitdon
                 var item = new ToolStripMenuItem(client.AccountName);
                 if (client is TwitdonTwitterClient)
                 {
-                    item.DropDownItems.Add(new ToolStripMenuItem("ホーム"));
-                    item.DropDownItems.Add(new ToolStripMenuItem("通知"));
-                    item.DropDownItems.Add(new ToolStripMenuItem("リスト"));
+                    foreach (Define.TwitterTimeLineType type in Enum.GetValues(typeof(Define.TwitterTimeLineType)))
+                    {
+                        var i = new ToolStripMenuItem(Utilities.TwitterTimeLineTypeToString(type), null, addTimeLine_Click);
+                        i.Tag = type;
+                        item.DropDownItems.Add(i);
+                    }
                 }
                 else if (client is TwitdonMastodonClient)
                 {
-                    item.DropDownItems.Add(new ToolStripMenuItem("ホーム"));
-                    item.DropDownItems.Add(new ToolStripMenuItem("通知"));
-                    item.DropDownItems.Add(new ToolStripMenuItem("連合"));
+                    foreach (Define.MastodonTimeLineType type in Enum.GetValues(typeof(Define.MastodonTimeLineType)))
+                    {
+                        var i = new ToolStripMenuItem(Utilities.MastodonTimeLineTypeToString(type), null, addTimeLine_Click);
+                        i.Tag = type;
+                        item.DropDownItems.Add(i);
+                    }
                 }
                 timelinesToolStripMenuItem.DropDownItems.Add(item);
                 deleteToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(client.AccountName, null, accountDelete_Click));
@@ -139,7 +162,7 @@ namespace Twitdon
             }
 
             // タイムラインの追加
-            var tlf = new TimeLineFrame(timeline);
+            var tlf = new TimeLineFrame(this, timeline);
             await tlf.StartStreaming();
             timelines.Add(tlf);
             tlf.Size = Size;
@@ -160,14 +183,19 @@ namespace Twitdon
             {
                 timelines[indexList[i]].StopStreaming();
                 timelines[indexList[i]].Dispose();
-                tableLayoutPanel.ColumnStyles.RemoveAt(indexList[i]);
                 timelines.RemoveAt(indexList[i]);
+                for (int j = indexList[i]; j < timelines.Count; j++)
+                {
+                    tableLayoutPanel.Controls.Remove(timelines[j]);
+                    tableLayoutPanel.Controls.Add(timelines[j], j, 0);
+                }
+                tableLayoutPanel.ColumnStyles.RemoveAt(indexList[i]);
+                tableLayoutPanel.ColumnCount--;
                 for (int j = i + 1; j < indexList.Count; j++)
                 {
                     indexList[j]--;
                 }
             }
-            tableLayoutPanel.ColumnCount -= indexList.Count;
 
             // 枠の大きさを調整
             for (int i = 0; i < tableLayoutPanel.ColumnCount; i++)
@@ -243,10 +271,10 @@ namespace Twitdon
                     {
                         // (テスト用)ホーム・Public タイムラインを追加。
                         var c = client as TwitdonMastodonClient;
-                        await AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, Define.MastodonTimeLineType.Home));
-                        await AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, Define.MastodonTimeLineType.Public));
+                        await AddTimeLine(new TimeLineMastodon(c, Define.MastodonTimeLineType.Home));
+                        await AddTimeLine(new TimeLineMastodon(c, Define.MastodonTimeLineType.Public));
                     }
-                    else if(client is TwitdonTwitterClient)
+                    else if (client is TwitdonTwitterClient)
                     {
                         var c = client as TwitdonTwitterClient;
                         await AddTimeLine(new TimeLineTwitter(c, Define.TwitterTimeLineType.Home));
@@ -282,8 +310,8 @@ namespace Twitdon
                     // (テスト用)ホーム・Public タイムラインを追加。
                     var c = client as TwitdonMastodonClient;
                     clients.Add(c);
-                    await AddTimeLine(new TimeLineMastodon(c, c.UserStreaming, Define.MastodonTimeLineType.Home));
-                    await AddTimeLine(new TimeLineMastodon(c, c.PublicStreaming, Define.MastodonTimeLineType.Public));
+                    await AddTimeLine(new TimeLineMastodon(c, Define.MastodonTimeLineType.Home));
+                    await AddTimeLine(new TimeLineMastodon(c, Define.MastodonTimeLineType.Public));
                 }
                 else if (client is TwitdonTwitterClient)
                 {
@@ -383,6 +411,21 @@ namespace Twitdon
         private async void buttonPost_Click(object sender, EventArgs e)
         {
             await Post();
+        }
+
+        private async void addTimeLine_Click(object sender, EventArgs e)
+        {
+            var item = (sender as ToolStripMenuItem);
+            if (item.OwnerItem.Text.EndsWith("@Twitter"))
+            {
+                var c = clients.Find(x => x.AccountName == item.OwnerItem.Text) as TwitdonTwitterClient;
+                await AddTimeLine(new TimeLineTwitter(c, (Define.TwitterTimeLineType)item.Tag));
+            }
+            else
+            {
+                var c = clients.Find(x => x.AccountName == item.OwnerItem.Text) as TwitdonMastodonClient;
+                await AddTimeLine(new TimeLineMastodon(c, (Define.MastodonTimeLineType)item.Tag));
+            }
         }
 
         #endregion

@@ -101,14 +101,13 @@ namespace Twitdon.Models
         /// コンストラクタです。
         /// </summary>
         /// <param name="client">Mastodon クライアント。</param>
-        /// <param name="streaming">イベントの設定されたストリーミング。</param>
         /// <param name="type">タイムラインの種類。</param>
-        public TimeLineMastodon(TwitdonMastodonClient client, TimelineStreaming streaming, Define.MastodonTimeLineType type)
+        public TimeLineMastodon(TwitdonMastodonClient client, Define.MastodonTimeLineType type)
         {
             this.client = client;
-            this.streaming = streaming;
+            streaming = type == Define.MastodonTimeLineType.Home ? client.UserStreaming : client.PublicStreaming;
             this.type = type;
-            var name = type == Define.MastodonTimeLineType.Home ? "" : "Public  ";
+            var name = $"{Utilities.MastodonTimeLineTypeToString(type)}  ";
             TimeLineName = $"{name}{client.AccountName}";
             statuses = new List<TimeLineStatus>(Define.StatusesCapacity);
             fetchedStatuses = new Queue<TwitdonMastodonStatus>();

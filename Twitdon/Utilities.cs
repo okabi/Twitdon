@@ -67,5 +67,25 @@ namespace Twitdon
             return false;
         }
 
+        /// <summary>
+        /// MastodonTimeLineType から文字列に変換します。
+        /// </summary>
+        /// <param name="type">MastodonTimeLineType。</param>
+        /// <returns></returns>
+        public static string MastodonTimeLineTypeToString(Define.MastodonTimeLineType type)
+        {
+            return type == Define.MastodonTimeLineType.Home ? "ホーム" :
+                type == Define.MastodonTimeLineType.Public ? "連合" : "";
+        }
+
+        /// <summary>
+        /// TwitterTimeLineType から文字列に変換します。
+        /// </summary>
+        /// <param name="type">TwitterTimeLineType。</param>
+        /// <returns></returns>
+        public static string TwitterTimeLineTypeToString(Define.TwitterTimeLineType type)
+        {
+            return type == Define.TwitterTimeLineType.Home ? "ホーム" : "";
+        }
     }
 }

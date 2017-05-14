@@ -38,9 +38,9 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userpawoonetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
             this.textBoxPost = new System.Windows.Forms.TextBox();
             this.buttonPost = new System.Windows.Forms.Button();
+            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
@@ -76,13 +76,13 @@
             // homeToolStripMenuItem
             // 
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
-            this.homeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.homeToolStripMenuItem.Text = "Home";
             // 
             // publicToolStripMenuItem
             // 
             this.publicToolStripMenuItem.Name = "publicToolStripMenuItem";
-            this.publicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.publicToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.publicToolStripMenuItem.Text = "Public";
             // 
             // accountsToolStripMenuItem
@@ -120,6 +120,7 @@
             this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel.ColumnCount = 1;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 81);
@@ -128,15 +129,6 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(1132, 500);
             this.tableLayoutPanel.TabIndex = 1;
-            // 
-            // pictureBoxUser
-            // 
-            this.pictureBoxUser.Location = new System.Drawing.Point(0, 27);
-            this.pictureBoxUser.Name = "pictureBoxUser";
-            this.pictureBoxUser.Size = new System.Drawing.Size(48, 48);
-            this.pictureBoxUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBoxUser.TabIndex = 2;
-            this.pictureBoxUser.TabStop = false;
             // 
             // textBoxPost
             // 
@@ -168,6 +160,15 @@
             this.buttonPost.Text = "投稿する";
             this.buttonPost.UseVisualStyleBackColor = true;
             this.buttonPost.Click += new System.EventHandler(this.buttonPost_Click);
+            // 
+            // pictureBoxUser
+            // 
+            this.pictureBoxUser.Location = new System.Drawing.Point(0, 27);
+            this.pictureBoxUser.Name = "pictureBoxUser";
+            this.pictureBoxUser.Size = new System.Drawing.Size(48, 48);
+            this.pictureBoxUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxUser.TabIndex = 2;
+            this.pictureBoxUser.TabStop = false;
             // 
             // MainForm
             // 

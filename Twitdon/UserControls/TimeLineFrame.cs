@@ -26,6 +26,11 @@ namespace Twitdon
         /// </summary>
         private readonly ITimeLine timeline;
 
+        /// <summary>
+        /// タイムラインが描画されている親フォーム。
+        /// </summary>
+        private readonly MainForm owner;
+
         #endregion
 
         #region プロパティ
@@ -38,6 +43,14 @@ namespace Twitdon
             get { return timeline.AccountName; }
         }
 
+        /// <summary>
+        /// Public user@pawoo.net のような一意のタイムライン名です。
+        /// </summary>
+        public string TimeLineName
+        {
+            get { return labelTimeLineName.Text; }
+        }
+
         #endregion
 
         #region コンストラクタ
@@ -45,10 +58,12 @@ namespace Twitdon
         /// <summary>
         /// コンストラクタです。
         /// </summary>
+        /// <param name="owner">タイムラインが描画されている親フォーム。</param>
         /// <param name="timeline">このインスタンスに紐付けるタイムライン。</param>
-        public TimeLineFrame(ITimeLine timeline)
+        public TimeLineFrame(MainForm owner, ITimeLine timeline)
         {
             InitializeComponent();
+            this.owner = owner;
             panel.MouseWheel += Panel_MouseWheel;
 
             // タイムラインにこの枠を紐付ける
@@ -151,7 +166,11 @@ namespace Twitdon
             UpdateUI();
         }
 
-        #endregion
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            owner.RemoveTimeLine(timeline.TimeLineName);
+        }
 
+        #endregion
     }
 }

@@ -118,7 +118,7 @@ namespace Twitdon.Models
         {
             this.client = client;
             this.type = type;
-            var name = type == Define.TwitterTimeLineType.Home ? "" : "Undefined";
+            var name = $"{Utilities.TwitterTimeLineTypeToString(type)}  ";
             TimeLineName = $"{name}{client.AccountName}";
             streaming = client.Streaming;
             OnGetStatusMessage = streaming.OfType<StatusMessage>();
